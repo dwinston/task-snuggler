@@ -17,10 +17,6 @@ Template.inputForm.events({
         allDay: false
       }
     );
-
-    $('#calendar').fullCalendar(
-      'refetchEvents'
-		);
 		
   }
 });

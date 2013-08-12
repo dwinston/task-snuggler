@@ -14,7 +14,14 @@ if (Meteor.isClient) {
       events: function(start, end, callback) {
         callback(Events.find().fetch());
       }
-		});		
+		});
+
+		Deps.autorun(function () {
+      Events.find();
+      $('#calendar').fullCalendar(
+        'refetchEvents'
+		  );
+    });
 	});
 }
 
