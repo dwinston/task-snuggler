@@ -1,23 +1,33 @@
 Events = new Meteor.Collection("events");
 Commitments = new Meteor.Collection("commitments");
 
-var randomDate = function(start, end) {
-  return new Date(start.getTime() + 
-                  Math.random() * (end.getTime() - start.getTime()));
+// the Date returned must lie on a minutePin.
+// e.g. minutePins = [0, 30] means the returned date
+// must be on the hour or on a half hour
+var randomDateFromNow = function(daysFromNow, minutePins) {
+  var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth();
+  var h = date.getHours();
+	var y = date.getFullYear();
+
+  var d_offset = Math.floor(Math.random() * daysFromNow);
+  date.setDate(d + d_offset);
+  var h_new = Math.floor(Math.random() * 24);
+  var minutes = _.first(_.shuffle(minutePins));
+  date.setHours(h_new);
+  date.setMinutes(minutes);
+
+  return date;
 };
 
 generateEvents = function (commitmentId) {
-  var now = new Date();
-	var d = now.getDate();
-	var m = now.getMonth();
-	var y = now.getFullYear();
 
   console.log('generating events for commitment ' + commitmentId);
 
   var commitment = Commitments.findOne(commitmentId);
   for (var s=0; s < commitment.numSessions; s++) {
-    var endsLatest = new Date(y,m,d+3);
-    var startsAt = randomDate(now, endsLatest);
+    var startsAt = randomDateFromNow(3, [0, 30]);
     Events.insert({
       title: commitment.title + ' #' + (s+1),
       start: startsAt,
