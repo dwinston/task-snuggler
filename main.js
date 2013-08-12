@@ -10,6 +10,8 @@ if (Meteor.isClient) {
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
+      defaultView: 'agendaWeek',
+      contentHeight: 600,
 			editable: true,
       events: function(start, end, callback) {
         callback(Events.find().fetch());
