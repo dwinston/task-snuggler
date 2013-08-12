@@ -10,18 +10,13 @@ Template.inputForm.events({
 		var m = date.getMonth();
 		var y = date.getFullYear();
 
-    events.push(
+    Events.insert(
       {
         title: description,
         start: new Date(y,m,d-2,16,0),
         allDay: false
       }
     );
-
-    $('#calendar').fullCalendar(
-      'refetchEvents'
-		);
 		
-    Session.set("eventsChanged", Session.get("eventsChanged") + 1);
   }
 });
