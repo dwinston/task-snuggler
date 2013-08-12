@@ -26,6 +26,21 @@ Meteor.startup(function () {
 		  }
 	  ];
 
+    var sleepStart = function (offset) {
+      return new Date(y,m,d+offset,21,0);
+    }
+    var sleepEnd = function (offset) {
+      return new Date(y,m,d+offset+1,9,0);
+    }
+    _.each([0,1,2,3], function (offset) {
+      events.push({
+        title: 'Sleep',
+        start: sleepStart(offset),
+        end: sleepEnd(offset),
+        allDay: false
+      });
+    });
+
     _.each(events, function (evt) {
       Events.insert(evt);
     });
