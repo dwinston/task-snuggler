@@ -24,6 +24,11 @@ generateEvents = function (commitmentId) {
       end: new Date(startsAt.getTime() + 
                     1000 * 60 * 60 * commitment.hoursPerSession),
       allDay: false
+    }, function (err, res) {
+      Commitments.update(commitmentId, {
+        $push: {eventIds: res}
+      });
+      console.log('added 1 event ID to commitment');
     })
   }
 }

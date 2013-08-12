@@ -34,7 +34,8 @@ Meteor.startup(function () {
       Commitments.insert({
         numSessions: 3,
         hoursPerSession: 1,
-        title: "Jogging"
+        title: "Jogging",
+        eventIds: []
       }, function (err, res) {
         generateEvents(res);
       });
