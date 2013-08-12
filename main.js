@@ -1,4 +1,32 @@
 Events = new Meteor.Collection("events");
+Commitments = new Meteor.Collection("commitments");
+
+var randomDate = function(start, end) {
+  return new Date(start.getTime() + 
+                  Math.random() * (end.getTime() - start.getTime()));
+};
+
+generateEvents = function (commitmentId) {
+  var now = new Date();
+	var d = now.getDate();
+	var m = now.getMonth();
+	var y = now.getFullYear();
+
+  console.log('generating events for commitment ' + commitmentId);
+
+  var commitment = Commitments.findOne(commitmentId);
+  for (var s=0; s < commitment.numSessions; s++) {
+    var endsLatest = new Date(y,m,d+3);
+    var startsAt = randomDate(now, endsLatest);
+    Events.insert({
+      title: commitment.title + ' #' + (s+1),
+      start: startsAt,
+      end: new Date(startsAt.getTime() + 
+                    1000 * 60 * 60 * commitment.hoursPerSession),
+      allDay: false
+    })
+  }
+}
 
 if (Meteor.isClient) {
 
@@ -12,6 +40,7 @@ if (Meteor.isClient) {
 			},
       defaultView: 'agendaWeek',
       contentHeight: 600,
+      firstHour: 9,
 			editable: true,
       events: function(start, end, callback) {
         callback(Events.find().fetch());
@@ -25,67 +54,4 @@ if (Meteor.isClient) {
 		  );
     });
 	});
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    if (Events.find().count() === 0) {
-      
-      var date = new Date();
-	    var d = date.getDate();
-	    var m = date.getMonth();
-	    var y = date.getFullYear();
-
-	    var events = [
-		    {
-			    title: 'All Day Event',
-			    start: new Date(y, m, 1)
-		    },
-		    {
-			    title: 'Long Event',
-			    start: new Date(y, m, d-5),
-			    end: new Date(y, m, d-2)
-		    },
-		    {
-			    id: 999,
-			    title: 'Repeating Event',
-			    start: new Date(y, m, d-3, 16, 0),
-			    allDay: false
-		    },
-		    {
-			    id: 999,
-			    title: 'Repeating Event',
-			    start: new Date(y, m, d+4, 16, 0),
-			    allDay: false
-		    },
-		    {
-			    title: 'Meeting',
-			    start: new Date(y, m, d, 10, 30),
-			    allDay: false
-		    },
-		    {
-			    title: 'Lunch',
-			    start: new Date(y, m, d, 12, 0),
-			    end: new Date(y, m, d, 14, 0),
-			    allDay: false
-		    },
-		    {
-			    title: 'Birthday Party',
-			    start: new Date(y, m, d+1, 19, 0),
-			    end: new Date(y, m, d+1, 22, 30),
-			    allDay: false
-		    },
-		    {
-			    title: 'Click for Google',
-			    start: new Date(y, m, 28),
-			    end: new Date(y, m, 29),
-			    url: 'http://google.com/'
-		    }
-	    ];
-
-      _.each(events, function (evt) {
-        Events.insert(evt);
-      });
-    }
-  });
 }

@@ -1,7 +1,7 @@
 Template.inputForm.events({
   "submit #inputForm": function (evt, templ) {
     evt.preventDefault();
-    var description = templ.find("#description").value;
+    var title = templ.find("#title").value;
     var numSessions = +templ.find("#numSessions").value;
     var hoursPerSession = +templ.find("#hoursPerSession").value;
 
@@ -12,7 +12,7 @@ Template.inputForm.events({
 
     Events.insert(
       {
-        title: description,
+        title: title,
         start: new Date(y,m,d-2,16,0),
         allDay: false
       }
