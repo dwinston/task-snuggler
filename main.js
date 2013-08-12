@@ -1,4 +1,47 @@
 Events = new Meteor.Collection("events");
+Commitments = new Meteor.Collection("commitments");
+
+// the Date returned must lie on a minutePin.
+// e.g. minutePins = [0, 30] means the returned date
+// must be on the hour or on a half hour
+var randomDateFromNow = function(daysFromNow, minutePins) {
+  var date = new Date();
+	var d = date.getDate();
+	var m = date.getMonth();
+  var h = date.getHours();
+	var y = date.getFullYear();
+
+  var d_offset = Math.floor(Math.random() * daysFromNow);
+  date.setDate(d + d_offset);
+  var h_new = Math.floor(Math.random() * 24);
+  var minutes = _.first(_.shuffle(minutePins));
+  date.setHours(h_new);
+  date.setMinutes(minutes);
+
+  return date;
+};
+
+generateEvents = function (commitmentId) {
+
+  console.log('generating events for commitment ' + commitmentId);
+
+  var commitment = Commitments.findOne(commitmentId);
+  for (var s=0; s < commitment.numSessions; s++) {
+    var startsAt = randomDateFromNow(3, [0, 30]);
+    Events.insert({
+      title: commitment.title + ' #' + (s+1),
+      start: startsAt,
+      end: new Date(startsAt.getTime() + 
+                    1000 * 60 * 60 * commitment.hoursPerSession),
+      allDay: false
+    }, function (err, res) {
+      Commitments.update(commitmentId, {
+        $push: {eventIds: res}
+      });
+      console.log('added 1 event ID to commitment');
+    })
+  }
+}
 
 if (Meteor.isClient) {
 
@@ -10,6 +53,9 @@ if (Meteor.isClient) {
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
+      defaultView: 'agendaWeek',
+      contentHeight: 600,
+      firstHour: 9,
 			editable: true,
       events: function(start, end, callback) {
         callback(Events.find().fetch());
@@ -23,67 +69,4 @@ if (Meteor.isClient) {
 		  );
     });
 	});
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    if (Events.find().count() === 0) {
-      
-      var date = new Date();
-	    var d = date.getDate();
-	    var m = date.getMonth();
-	    var y = date.getFullYear();
-
-	    var events = [
-		    {
-			    title: 'All Day Event',
-			    start: new Date(y, m, 1)
-		    },
-		    {
-			    title: 'Long Event',
-			    start: new Date(y, m, d-5),
-			    end: new Date(y, m, d-2)
-		    },
-		    {
-			    id: 999,
-			    title: 'Repeating Event',
-			    start: new Date(y, m, d-3, 16, 0),
-			    allDay: false
-		    },
-		    {
-			    id: 999,
-			    title: 'Repeating Event',
-			    start: new Date(y, m, d+4, 16, 0),
-			    allDay: false
-		    },
-		    {
-			    title: 'Meeting',
-			    start: new Date(y, m, d, 10, 30),
-			    allDay: false
-		    },
-		    {
-			    title: 'Lunch',
-			    start: new Date(y, m, d, 12, 0),
-			    end: new Date(y, m, d, 14, 0),
-			    allDay: false
-		    },
-		    {
-			    title: 'Birthday Party',
-			    start: new Date(y, m, d+1, 19, 0),
-			    end: new Date(y, m, d+1, 22, 30),
-			    allDay: false
-		    },
-		    {
-			    title: 'Click for Google',
-			    start: new Date(y, m, 28),
-			    end: new Date(y, m, 29),
-			    url: 'http://google.com/'
-		    }
-	    ];
-
-      _.each(events, function (evt) {
-        Events.insert(evt);
-      });
-    }
-  });
 }
