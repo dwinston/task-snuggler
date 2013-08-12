@@ -10,7 +10,7 @@ Template.inputForm.events({
 		var m = date.getMonth();
 		var y = date.getFullYear();
 
-    events.push(
+    Events.insert(
       {
         title: description,
         start: new Date(y,m,d-2,16,0),
@@ -22,6 +22,5 @@ Template.inputForm.events({
       'refetchEvents'
 		);
 		
-    Session.set("eventsChanged", Session.get("eventsChanged") + 1);
   }
 });
