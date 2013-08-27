@@ -15,3 +15,8 @@
 .commitment.selected {
     background-color: yellow;
 }
+
+#signin-ui {
+    text-align: right;
+    margin: 0 0 20px 0;
+}
