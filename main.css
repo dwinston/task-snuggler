@@ -12,3 +12,6 @@
 
 }
 
+.commitment.selected {
+    background-color: yellow;
+}

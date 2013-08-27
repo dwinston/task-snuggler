@@ -54,22 +54,44 @@
       </div>
       <div class="control-group">
         <div class="controls">
-          <button type="submit" class="btn">Add</button>
+          <button type="submit" class="btn">Add/Edit</button>
+          <button type="reset" class="btn">Clear</button>
         </div>
       </div>
     </form>
-
+    
   </div>
 </template>
 
 <template name="dashboard">
   <div id="dashboard">
     <h1>Dashboard</h1>
-    <ul id="events">
-      {{#each events}}
+    Commitments:
+    <ul id="event">
+      {{#each commitments}}
+      {{> commitment}}
+      {{/each}}
+    </ul>
+  </div>
+  {{#if commitmentDetails}}
+  <div class="details">
+    Details:
+    <ul>
+      {{#each commitmentDetails}}
         <li>{{title}}</li>
       {{/each}}
     </ul>
+  </div>
+  {{/if}}
+</template>
+
+<template name="commitment">
+  <div class="commitment {{selected}}">
+    <span class="name">
+      <li>{{title}} <br>
+        {{numSessions}} times / week 
+        & {{hoursPerSession}} hours / session </li>
+    </span>
   </div>
 </template>
 
