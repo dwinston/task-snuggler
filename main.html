@@ -73,10 +73,14 @@
       {{/each}}
     </ul>
   </div>
-  {{#if selectedEvent}}
+  {{#if commitmentDetails}}
   <div class="details">
     Details:
-    <div class="name">{{selectedEvent}}</div>
+    <ul>
+      {{#each commitmentDetails}}
+        <li>{{title}}</li>
+      {{/each}}
+    </ul>
   </div>
   {{/if}}
 </template>

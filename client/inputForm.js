@@ -17,13 +17,3 @@ Template.inputForm.events({
             });        	
     },
 });
-
-Deps.autorun(function (c) {
-    var tmpID = Session.get("selected_commitment");
-    var commitment = Commitments.findOne(tmpID);
-    // Commitment database not found
-    $('title').val('abc');
-    //$('#title').val(commitment.title);
-    //$('#numSessions').val(commitment.numSessions);
-    //$('#hoursPerSession').val(commnt.hoursPerSession);
-});
