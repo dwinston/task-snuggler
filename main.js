@@ -6,6 +6,7 @@ generateEvents = function (commitmentId) {
   for (var s=0; s < commitment.numSessions; s++) {
     var startsAt = tsnug.safeRandomMomentFromNow(commitment.hoursPerSession);
     Events.insert({
+      userId: commitment.userId,
       title: commitment.title + ' #' + (s+1),
       start: startsAt.toDate(),
       end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),
@@ -15,32 +16,4 @@ generateEvents = function (commitmentId) {
         $push: {eventIds: res}});
     });
   }
-}
-
-if (Meteor.isClient) {
-
-  Meteor.startup(function () {
-		
-		$('#calendar').fullCalendar({
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
-			},
-      defaultView: 'agendaWeek',
-      contentHeight: 600,
-      firstHour: 9,
-			editable: true,
-      events: function(start, end, callback) {
-        callback(Events.find().fetch());
-      }
-		});
-
-		Deps.autorun(function () {
-      Events.find();
-      $('#calendar').fullCalendar(
-        'refetchEvents'
-		  );
-    });
-	});
 }
