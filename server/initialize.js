@@ -9,7 +9,8 @@ Meteor.startup(function () {
 	  var events = [
 		  {
 			  title: 'Meeting',
-			  start: new Date(y, m, d, 10, 30),
+			  start: new Date(y, m, d, 9, 30),
+			  end: new Date(y, m, d, 10, 30),
 			  allDay: false
 		  },
 		  {
