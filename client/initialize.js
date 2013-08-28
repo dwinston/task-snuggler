@@ -1,6 +1,13 @@
 Meteor.subscribe("events");
 Meteor.subscribe("commitments");
 
+var shiftTime = function(t, dayDelta, minuteDelta) {
+  return moment(t)
+    .add('days',dayDelta)
+    .add('minutes', minuteDelta)
+    .toDate();
+};
+
 Meteor.startup(function () {
 	
 	$('#calendar').fullCalendar({
@@ -30,6 +37,10 @@ Meteor.startup(function () {
 		editable: true,
     events: function(start, end, callback) {
       callback(Events.find().fetch());
+    },
+    eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+      Events.remove(event._id);
+      Events.insert(event);
     }
 	});
 
