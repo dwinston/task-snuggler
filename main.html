@@ -12,6 +12,7 @@
     <div class="row-fluid">
       <div class="span6">
         <div class="span12">
+          {{> addEvent}}
           {{> inputForm}}
         </div>
         <div class="span12">
@@ -25,46 +26,29 @@
   </div>
 </body>
 
+<template name="addEvent">
+  <div id="addEvent">
+    <h1>Add Event</h1>
+    <p>Add events by clicking and dragging on the calendar.</p>
+  </div>
+</template>
+
 <template name="inputForm">
   <div id="inputForm">
     <h1>Add Commitment</h1>
-    
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="title">
-          Title
-        </label>
-        <div class="controls">
-          <input type="text" id="title" 
-                 placeholder="Title">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="numSessions">
-          Number of Sessions
-        </label>
-        <div class="controls">
-          <input type="text" id="numSessions" 
-                 placeholder="Number of Sessions">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="hoursPerSession">
-          Hours per Session
-        </label>
-        <div class="controls">
-          <input type="text" id="hoursPerSession" 
-                 placeholder="Hours per Session">
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" class="btn">Add/Edit</button>
-          <button type="reset" class="btn">Clear</button>
-        </div>
-      </div>
+    <form class="form-inline">
+      I commit to 
+      <input type="text" class="input-mini"
+             id="title" placeholder="meditate">
+      for       
+      <input type="number" min="0" step="0.5" required="required"
+             id="hoursPerSession" class="input-mini" placeholder="2">
+      hours, 
+      <input type="number" min="0" step="1" required="required"
+             id="numSessions" class="input-mini" placeholder="3">
+      times/week.
+      <button type="submit" class="btn">Add</button>
     </form>
-    
   </div>
 </template>
 

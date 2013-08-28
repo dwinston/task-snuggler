@@ -10,6 +10,21 @@ Meteor.startup(function () {
 			right: 'month,agendaWeek,agendaDay'
 		},
     defaultView: 'agendaWeek',
+    selectable: true,
+    selectHelper: true,
+    select: function(start, end, allDay) {
+			var title = prompt('Event Title:');
+			if (title) {
+        Events.insert({
+          userId: Meteor.userId(),
+					title: title,
+					start: start,
+					end: end,
+					allDay: allDay
+				});
+			}
+			calendar.fullCalendar('unselect');
+		},
     contentHeight: 600,
     firstHour: 9,
 		editable: true,
