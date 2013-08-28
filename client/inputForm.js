@@ -13,8 +13,12 @@ Template.inputForm.events({
         title: title,
         eventIds: []
       }, 
-      function (err, res) {
-        generateEvents(res);
+      function (err, commitmentId) {
+        if (err) { 
+          alert(err + ". Are you signed in?");
+        } else {
+          generateEvents(commitmentId)
+        };
       });        	
   },
 });
