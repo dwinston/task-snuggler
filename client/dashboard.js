@@ -23,3 +23,9 @@ Template.dashboard.commitmentDetails = function() {
       return evt;
     });
 };
+
+Template.dashboard.events({
+  "click #newCommitment": function(evt){
+    Session.set("selected_commitment", "new_commitment");
+  }
+});

@@ -5,50 +5,50 @@ Meteor.startup(function () {
   // 'db.commitments.remove({})' plus
   // 'db.events.remove({})'.
   var cameronId = "i3KL8qwk8AfoTcWCw";
-  var donnyId = "s7jPdnaHTfoS9EXpz";
+  var donnyId = "dwuEhNTa2kimR6zPw";
   
   if (Events.find().count() === 0) { 
     var now = moment().startOf('week');
-	  var d = now.date();
-	  var m = now.month();
-	  var y = now.year();
-	  var events = [
-	    {
-		    userId: donnyId,
-        title: 'Meeting',
-		    start: new Date(y, m, d+2, 9, 30),
-		    end: new Date(y, m, d+2, 10, 30),
-		    allDay: false
-	    },
-	    {
-		    userId: cameronId,
-        title: 'Lunch',
-		    start: new Date(y, m, d+1, 12, 0),
-		    end: new Date(y, m, d+1, 14, 0),
-		    allDay: false
-	    },
-	    {
-		    userId: donnyId,
-        title: 'Birthday Party',
-		    start: new Date(y, m, d+3, 16, 0),
-		    end: new Date(y, m, d+3, 18, 30),
-		    allDay: false
-	    },
-	    {
-		    userId: cameronId,
-        title: 'Hacking',
-		    start: new Date(y, m, d+5, 16, 0),
-		    end: new Date(y, m, d+5, 18, 30),
-		    allDay: false
-	    },	    
+    var d = now.date();
+    var m = now.month();
+    var y = now.year();
+    var events = [
       {
-		    userId: donnyId,
+	userId: donnyId,
+        title: 'Meeting',
+	start: new Date(y, m, d+2, 9, 30),
+	end: new Date(y, m, d+2, 10, 30),
+	allDay: false
+      },
+      {
+	userId: cameronId,
+        title: 'Lunch',
+	start: new Date(y, m, d+1, 12, 0),
+	end: new Date(y, m, d+1, 14, 0),
+	allDay: false
+      },
+      {
+	userId: donnyId,
+        title: 'Birthday Party',
+	start: new Date(y, m, d+3, 16, 0),
+	end: new Date(y, m, d+3, 18, 30),
+	allDay: false
+      },
+      {
+	userId: cameronId,
+        title: 'Hacking',
+	start: new Date(y, m, d+5, 16, 0),
+	end: new Date(y, m, d+5, 18, 30),
+	allDay: false
+      },	    
+      {
+	userId: donnyId,
         title: 'Ultimate Frisbee',
-		    start: new Date(y, m, d+6, 12, 0),
-		    end: new Date(y, m, d+6, 14, 0),
-		    allDay: false
-	    }
-	  ];
+	start: new Date(y, m, d+6, 12, 0),
+	end: new Date(y, m, d+6, 14, 0),
+	allDay: false
+      }
+    ];
 
     for (var offset=-1; offset<7; offset++){
       events.push({

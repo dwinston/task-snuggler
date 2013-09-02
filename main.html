@@ -48,7 +48,8 @@
       <input type="number" min="0" step="1" required="required"
              id="numSessions" class="input-mini" placeholder="3">
       times/week.
-      <button type="submit" class="btn">Add</button>
+      <button type="submit" class="btn">Add/Edit</button>
+      <button type="reset" class="btn">Delete</button>
     </form>
   </div>
 </template>
@@ -57,6 +58,7 @@
   <div id="dashboard">
     <h1>Dashboard</h1>
     Commitments:
+    <button type="button" id="newCommitment" class="btn">New</button>
     <ul id="event">
       {{#each commitments}}
       {{> commitment}}
