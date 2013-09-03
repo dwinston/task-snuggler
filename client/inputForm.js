@@ -17,7 +17,8 @@ Template.inputForm.events({
         if (err) { 
           alert(err + ". Are you signed in?");
         } else {
-          generateEvents(commitmentId);
+          generateEvents(commitmentId,
+                         Session.get("eventGenerationAlgorithm"));
         };
       }
     );     

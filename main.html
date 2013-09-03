@@ -62,6 +62,15 @@
       {{> commitment}}
       {{/each}}
     </ul>
+    Event Generation Algorithm:
+    <select id="algorithmSelection" class="input-large">
+      <option value="safeRandomMomentFromNow" selected>
+        Random and non-conflicting, between now and end of week
+      </option>
+      <option value="randomMomentFromNow">
+        Random, between now and end of week
+      </option>
+    </select>
   </div>
 </template>
 

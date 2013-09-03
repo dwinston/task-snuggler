@@ -1,5 +1,6 @@
 Meteor.subscribe("events");
 Meteor.subscribe("commitments");
+Session.setDefault("eventGenerationAlgorithm","safeRandomMomentFromNow"); 
 
 var shiftTime = function(t, dayDelta, minuteDelta) {
   return moment(t)

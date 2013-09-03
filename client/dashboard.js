@@ -45,8 +45,15 @@ Template.dashboard.events({
          eventIds: []
        }
       }, function (err) {
-        if (!err) { generateEvents(commitment._id); }
+        if (!err) { 
+          generateEvents(commitment._id, 
+                         Session.get("eventGenerationAlgorithm")); 
+        }
       }
     );
+  },
+  "change #algorithmSelection": function (evt, templ) {
+    Session.set("eventGenerationAlgorithm", 
+                templ.find("#algorithmSelection").value);
   }
 });
