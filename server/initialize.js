@@ -4,8 +4,17 @@ Meteor.startup(function () {
   // do 'meteor mongo' and then
   // 'db.commitments.remove({})' plus
   // 'db.events.remove({})'.
-  var cameronId = "i3KL8qwk8AfoTcWCw";
-  var donnyId = "dwuEhNTa2kimR6zPw";
+  if (Meteor.users.find().count() === 0) {
+    var usernames = EJSON.parse(Assets.getText("usernames.json"));
+    _.each(usernames, function (username) {
+      Accounts.createUser({
+        username: username,
+        password: "foobar"
+      });
+    });
+  }
+  var cameronId = Meteor.users.findOne({username: "cameron"})._id;
+  var donnyId = Meteor.users.findOne({username: "donny"})._id;
   
   if (Events.find().count() === 0) { 
     var now = moment().startOf('week');
@@ -14,44 +23,44 @@ Meteor.startup(function () {
     var y = now.year();
     var events = [
       {
-	userId: donnyId,
+	      userId: donnyId,
         type: 'event',
         title: 'Meeting',
-	start: new Date(y, m, d+2, 9, 30),
-	end: new Date(y, m, d+2, 10, 30),
-	allDay: false
+	      start: new Date(y, m, d+2, 9, 30),
+	      end: new Date(y, m, d+2, 10, 30),
+	      allDay: false
       },
       {
-	userId: cameronId,
+	      userId: cameronId,
         type: 'event',
         title: 'Lunch',
-	start: new Date(y, m, d+1, 12, 0),
-	end: new Date(y, m, d+1, 14, 0),
-	allDay: false
+	      start: new Date(y, m, d+1, 12, 0),
+	      end: new Date(y, m, d+1, 14, 0),
+	      allDay: false
       },
       {
-	userId: donnyId,
+	      userId: donnyId,
         type: 'event',
         title: 'Birthday Party',
-	start: new Date(y, m, d+3, 16, 0),
-	end: new Date(y, m, d+3, 18, 30),
-	allDay: false
+	      start: new Date(y, m, d+3, 16, 0),
+	      end: new Date(y, m, d+3, 18, 30),
+	      allDay: false
       },
       {
-	userId: cameronId,
+	      userId: cameronId,
         type: 'event',
         title: 'Hacking',
-	start: new Date(y, m, d+5, 16, 0),
-	end: new Date(y, m, d+5, 18, 30),
-	allDay: false
+	      start: new Date(y, m, d+5, 16, 0),
+	      end: new Date(y, m, d+5, 18, 30),
+	      allDay: false
       },	    
       {
-	userId: donnyId,
+	      userId: donnyId,
         type: 'event',
         title: 'Ultimate Frisbee',
-	start: new Date(y, m, d+6, 12, 0),
-	end: new Date(y, m, d+6, 14, 0),
-	allDay: false
+	      start: new Date(y, m, d+6, 12, 0),
+	      end: new Date(y, m, d+6, 14, 0),
+	      allDay: false
       }
     ];
 
