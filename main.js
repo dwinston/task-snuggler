@@ -7,6 +7,7 @@ generateEvents = function (commitmentId) {
     var startsAt = tsnug.safeRandomMomentFromNow(commitment.hoursPerSession);
     Events.insert({
       userId: commitment.userId,
+      type: 'commitment',
       title: commitment.title + ' #' + (s+1),
       start: startsAt.toDate(),
       end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),

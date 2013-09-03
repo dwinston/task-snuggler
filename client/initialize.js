@@ -29,6 +29,7 @@ Meteor.startup(function () {
       if (title) {
         Events.insert({
           userId: Meteor.userId(),
+          type: 'event',
 	  title: title,
 	  start: start,
 	  end: end,
@@ -44,29 +45,18 @@ Meteor.startup(function () {
 
     // Delete event by clicking on it
     eventClick: function(event, jsEvent, view) {
-      var deleteFlag = confirm
-      ('Do you really want to delete the ' + event.title + ' event?');
-      if (deleteFlag) Events.remove(event._id);
+      if (event.type === 'event'){
+        var deleteFlag = confirm
+        ('Do you really want to delete the ' + event.title + ' event?');
+        if (deleteFlag) Events.remove(event._id);
+      }
     },
 
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
       Events.remove(event._id);
       Events.insert(event);
-    },
-
-    // Change event duration by resize -- this doesn't work yet
-    /*
-    eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
-      alert(
-        "The end date of " + event.title + "has been moved " +
-          dayDelta + " days and " +
-          minuteDelta + " minutes."
-      );
-      if (!confirm("is this okay?")) {
-        revertFunc();
-      }
-    }*/
+    }
   });
 
   Deps.autorun(function () {
