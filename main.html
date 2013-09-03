@@ -5,8 +5,14 @@
 <body>
   <div class="container">
     <div class="row-fluid">
+      <div class="span12">
+        <div id="signin-ui">{{loginButtons align="right"}}</div>
+      </div>
+    </div>
+    <div class="row-fluid">
       <div class="span6">
         <div class="span12">
+          {{> addEvent}}
           {{> inputForm}}
         </div>
         <div class="span12">
@@ -20,46 +26,30 @@
   </div>
 </body>
 
+<template name="addEvent">
+  <div id="addEvent">
+    <h1>Event editing</h1>
+    <p>Add events by clicking and dragging on the calendar.<br>
+      Delete events by clicking on an event.</p>
+  </div>
+</template>
+
 <template name="inputForm">
-  <div id="inputForm">
+  <div>
     <h1>Add Commitment</h1>
-    
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="title">
-          Title
-        </label>
-        <div class="controls">
-          <input type="text" id="title" 
-                 placeholder="Title">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="numSessions">
-          Number of Sessions
-        </label>
-        <div class="controls">
-          <input type="text" id="numSessions" 
-                 placeholder="Number of Sessions">
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="hoursPerSession">
-          Hours per Session
-        </label>
-        <div class="controls">
-          <input type="text" id="hoursPerSession" 
-                 placeholder="Hours per Session">
-        </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" class="btn">Add/Edit</button>
-          <button type="reset" class="btn">Clear</button>
-        </div>
-      </div>
+    <form id="addCommitment" class="form-inline">
+      I commit to 
+      <input type="text" class="input-mini" required="required"
+             id="title" placeholder="meditate">
+      for       
+      <input type="number" min="0.5" step="0.5" required="required"
+             id="hoursPerSession" class="input-mini" placeholder="2">
+      hours, 
+      <input type="number" min="1" step="1" required="required"
+             id="numSessions" class="input-mini" placeholder="3">
+      times/week.
+      <button type="submit" class="btn">Add</button>
     </form>
-    
   </div>
 </template>
 
@@ -67,32 +57,37 @@
   <div id="dashboard">
     <h1>Dashboard</h1>
     Commitments:
-    <ul id="event">
+    <ul id="commitments">
       {{#each commitments}}
       {{> commitment}}
       {{/each}}
     </ul>
   </div>
-  {{#if commitmentDetails}}
-  <div class="details">
-    Details:
-    <ul>
-      {{#each commitmentDetails}}
-        <li>{{title}}</li>
-      {{/each}}
-    </ul>
-  </div>
-  {{/if}}
 </template>
 
 <template name="commitment">
-  <div class="commitment {{selected}}">
-    <span class="name">
-      <li>{{title}} <br>
-        {{numSessions}} times / week 
-        & {{hoursPerSession}} hours / session </li>
-    </span>
-  </div>
+    <li id={{_id}} class="commitment {{selected}}">
+      {{#unless selected}}
+        {{title}} for {{hoursPerSession}} hours, 
+        {{numSessions}} times/week.
+      {{else}}
+        <form id="editCommitment" class="form-inline">
+          <input type="text" class="input-mini" required="required"
+                 id="titleToEdit" value="{{title}}">
+          for       
+          <input type="number" min="0.5" step="0.5" required="required"
+                 id="hoursPerSessionToEdit" class="input-mini" 
+                 value="{{hoursPerSession}}">
+          hours, 
+          <input type="number" min="1" step="1" required="required"
+                 id="numSessionsToEdit" class="input-mini" 
+                 value="{{numSessions}}">
+          times/week.
+          <button type="submit" class="btn">Edit</button>
+          <button id="removeCommitment" class="btn">Remove</button>
+        </form>
+      {{/unless}}
+    </li>
 </template>
 
 <template name="calendar">

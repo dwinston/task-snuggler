@@ -13,5 +13,18 @@
 }
 
 .commitment.selected {
-    background-color: yellow;
+    /*background-color: yellow;*/
+}
+
+#signin-ui {
+    text-align: right;
+    margin: 0 0 20px 0;
+}
+
+input[type="number"] {
+    width: 2.5em;
+}
+
+h1 {
+    font-size: 1.5em;
 }
