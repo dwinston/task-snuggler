@@ -9,16 +9,13 @@ tsnug.safeRandomMomentFromNow = function (durationInHours) {
   // Grab events that start or end between now and the
   // end of the week.
   var events = Events.find({
-    $or: [
-      {
-        start: {$gte: start0.toDate()}, 
-        start: {$lt: endN.toDate()}
-      },
-      {
-        end: {$gt: start0.toDate()}, 
-        end: {$lt: endN.toDate()}
-      }
-    ]
+    $or: [{
+      $and: [{start: {$gte: start0.toDate()}}, 
+             {start: {$lt: endN.toDate()}}]
+    },{
+      $and: [{end: {$gt: start0.toDate()}}, 
+             {end: {$lt: endN.toDate()}}]
+    }]
   }, {
     sort: ["start", "asc"]
   }).fetch(); // does cursor forEach() yield item index to callback?
@@ -93,6 +90,5 @@ tsnug.safeRandomMomentFromNow = function (durationInHours) {
     }
   };
   var interval = intervals[_.indexOf(startOffsets, startOffset, true)];
-  console.log(_.indexOf(startOffsets, startOffset, true));
   return interval[0].add('hours', startsAt - startOffset);
 };

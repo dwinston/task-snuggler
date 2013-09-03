@@ -9,6 +9,10 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 };
 
 Meteor.startup(function () {
+
+  Accounts.ui.config({
+    passwordSignupFields: 'USERNAME_ONLY'
+  });
   
   $('#calendar').fullCalendar({
     header: {
