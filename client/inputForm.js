@@ -5,7 +5,7 @@ Template.inputForm.events({
     var numSessions = +templ.find("#numSessions").value;
     var hoursPerSession = +templ.find("#hoursPerSession").value;
     
-    if (Session.get("selected_commitment")==="new_commitment"){
+    if (Session.equals("selected_commitment", "new_commitment")){
       Commitments.insert(
         {
           userId: Meteor.userId(),
