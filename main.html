@@ -35,21 +35,20 @@
 </template>
 
 <template name="inputForm">
-  <div id="inputForm">
+  <div>
     <h1>Add Commitment</h1>
-    <form class="form-inline">
+    <form id="addCommitment" class="form-inline">
       I commit to 
-      <input type="text" class="input-mini"
+      <input type="text" class="input-mini" required="required"
              id="title" placeholder="meditate">
       for       
-      <input type="number" min="0" step="0.5" required="required"
+      <input type="number" min="0.5" step="0.5" required="required"
              id="hoursPerSession" class="input-mini" placeholder="2">
       hours, 
-      <input type="number" min="0" step="1" required="required"
+      <input type="number" min="1" step="1" required="required"
              id="numSessions" class="input-mini" placeholder="3">
       times/week.
-      <button type="submit" class="btn">Add/Edit</button>
-      <button type="reset" class="btn">Delete</button>
+      <button type="submit" class="btn">Add</button>
     </form>
   </div>
 </template>
@@ -58,33 +57,37 @@
   <div id="dashboard">
     <h1>Dashboard</h1>
     Commitments:
-    <button type="button" id="newCommitment" class="btn">New</button>
-    <ul id="event">
+    <ul id="commitments">
       {{#each commitments}}
       {{> commitment}}
       {{/each}}
     </ul>
   </div>
-  {{#if commitmentDetails}}
-  <div class="details">
-    Details:
-    <ul>
-      {{#each commitmentDetails}}
-        <li>{{title}}</li>
-      {{/each}}
-    </ul>
-  </div>
-  {{/if}}
 </template>
 
 <template name="commitment">
-  <div class="commitment {{selected}}">
-    <span class="name">
-      <li>{{title}} <br>
-        {{numSessions}} times / week 
-        & {{hoursPerSession}} hours / session </li>
-    </span>
-  </div>
+    <li id={{_id}} class="commitment {{selected}}">
+      {{#unless selected}}
+        {{title}} for {{hoursPerSession}} hours, 
+        {{numSessions}} times/week.
+      {{else}}
+        <form id="editCommitment" class="form-inline">
+          <input type="text" class="input-mini" required="required"
+                 id="titleToEdit" value="{{title}}">
+          for       
+          <input type="number" min="0.5" step="0.5" required="required"
+                 id="hoursPerSessionToEdit" class="input-mini" 
+                 value="{{hoursPerSession}}">
+          hours, 
+          <input type="number" min="1" step="1" required="required"
+                 id="numSessionsToEdit" class="input-mini" 
+                 value="{{numSessions}}">
+          times/week.
+          <button type="submit" class="btn">Edit</button>
+          <button id="removeCommitment" class="btn">Remove</button>
+        </form>
+      {{/unless}}
+    </li>
 </template>
 
 <template name="calendar">

@@ -8,7 +8,7 @@ generateEvents = function (commitmentId) {
     Events.insert({
       userId: commitment.userId,
       type: 'commitment',
-      title: commitment.title + ' #' + (s+1),
+      title: commitment.title,
       start: startsAt.toDate(),
       end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),
       allDay: false
