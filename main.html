@@ -65,10 +65,13 @@
     Event Generation Algorithm:
     <select id="algorithmSelection" class="input-large">
       <option value="safeRandomMomentFromNow" selected>
-        Random and non-conflicting, between now and end of week
+        One at a time, random and non-conflicting, between now and end of week
       </option>
       <option value="randomMomentFromNow">
-        Random, between now and end of week
+        One at a time, random, between now and end of week
+      </option>
+      <option value="evenlyDistributedMomentsFromNow">
+        All at once, evenly distributed, between now and end of week
       </option>
     </select>
   </div>
