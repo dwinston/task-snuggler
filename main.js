@@ -2,6 +2,15 @@ Events = new Meteor.Collection("events");
 Commitments = new Meteor.Collection("commitments");
 
 var insertCommitmentEvent = function (commitment, startsAt) {
+  if (startsAt === null) {
+    if (Meteor.isClient) {
+      alert("There isn't enough non-conflicting time for this commitment.");
+    } else {
+      console.log("There isn't enough non-conflicting time " + 
+                  "for this commitment.");
+    }
+    return;
+  }
   Events.insert({
     userId: commitment.userId,
     type: 'commitment',

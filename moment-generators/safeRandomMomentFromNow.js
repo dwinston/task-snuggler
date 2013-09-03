@@ -51,13 +51,13 @@ tsnug.safeRandomMomentFromNow = function (durationInHours) {
 
   // Filter for intervals capable of storing an event
   // of duration durationInHours hours.
-  // Return false if the resulting array is empty.
+  // Return null if the resulting array is empty.
   intervals = _.filter(intervals, function (interval) {
     return interval[1].diff(interval[0], 'hours', true) 
       >= durationInHours;
   });
   if (_.isEmpty(intervals)) { 
-    return false; 
+    return null; 
   }
 
   // Produce an array of safe moments to start events
