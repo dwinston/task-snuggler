@@ -90,5 +90,35 @@ tsnug.safeRandomMomentFromNow = function (durationInHours) {
     }
   };
   var interval = intervals[_.indexOf(startOffsets, startOffset, true)];
-  return interval[0].add('hours', startsAt - startOffset);
+  var pureMoment = interval[0].add('hours', startsAt - startOffset);
+  
+  // take the pureMoment to be on an hour or half-hour if possible
+  var pureMomentMinutes = pureMoment.minutes();
+  var firstCandidate, secondCandidate;
+  if (pureMomentMinutes >= 30) {
+    if (pureMomentMinutes >= 45) {
+      firstCandidate = moment(pureMoment).startOf('hour').add('hours', 1);
+      secondCandidate = moment(firstCandidate).subtract('minutes', 30);
+    } else {
+      firstCandidate = moment(pureMoment).startOf('hour').add('minutes', 30);
+      secondCandidate = moment(firstCandidate).add('minutes', 30);
+    }
+  } else { // pureMomentMinutes < 30
+    if (pureMomentMinutes < 15) {
+      firstCandidate = moment(pureMoment).startOf('hour');
+      secondCandidate = moment(firstCandidate).add('minutes', 30);
+    } else {
+      firstCandidate = moment(pureMoment).startOf('hour').add('minutes', 30);
+      secondCandidate = moment(firstCandidate).subtract('minutes', 30);
+    }
+  }
+  if (firstCandidate >= interval[0] && 
+      firstCandidate <= interval[1]) {
+    return firstCandidate;
+  } else if (secondCandidate >= interval[0] && 
+             secondCandidate <= interval[1]) {
+    return secondCandidate;
+  } else {
+    return pureMoment;
+  }
 };
