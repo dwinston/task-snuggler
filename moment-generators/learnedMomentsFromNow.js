@@ -2,16 +2,17 @@ tsnug.learnedMomentsFromNow = function(commitment) {
 
   var hoursPerSession = commitment.hoursPerSession;
   var numSessions = commitment.numSessions;
-
+  
   // obtain intervals of safe starts
   var intervals = tsnug.safeStarts(hoursPerSession);
   if (_.isEmpty(intervals)) { 
     return null;
   }
- 
+
+
   // Return a list of inidces of possible times
   // Can do intersection later on with the indices of the preferences
-  var avaibleStartIndex = [];
+  var availableStartIndices = [];
   _.each(intervals, function(interval){
     var candidates = tsnug.findRoundingCandidates(interval[0], false);
     var candidate = _.find(candidates, function (candidate) {
@@ -21,25 +22,43 @@ tsnug.learnedMomentsFromNow = function(commitment) {
       var timeIndex = 
         moment(candidate).diff(
           moment(candidate).startOf('week'), 'hours', true)*2;
-      avaibleStartIndex.push(timeIndex);
+      availableStartIndices.push(timeIndex);
       candidate.add('hours', 0.5);
     }
   });
-  //console.log(avaibleStartIndex);
 
   // retrieve of key-value store of preferences
   // of form (startIndex, weight)
   // e.g. {(1,3),(3,5)} means that Sun 12:30am has weight 3
   // and Sun 01:30am has weight 5.
   //[0,3,0,5]
+  var prefs = commitment.prefs;
+  var timeRanking =
+    _.map(availableStartIndices, function(availableStartIndex){
+      if (_.has(prefs, availableStartIndex)){
+        return prefs[availableStartIndex];
+      }else{
+        return 0;
+      }
+    });
 
   // If available, add preference weight if specified
   //[0,0,1,6]
-
-  // sort array in desc order and dump unavailables at end
+  // sort array in ascending order and dump unavailables at end
   //[3,2]
-  // shuffle score-1 indices to get randomness for
-  // slots without preferences.
+  var sortedStartIndices = 
+    _.sortBy(availableStartIndices, function(num, index){
+      var tmpRank = timeRanking[index];
+      // Use ranking for sorting, -1 for descending order
+      if (tmpRank){
+        return tmpRank; // Use the preferences
+      }else{
+        // shuffle score-1 indices to get randomness for
+        // slots without preferences.
+        return _.random(0,0.9); // Randomized number for rank=0
+      }
+    });
+  console.log(sortedStartIndices);
 
   // sort is O(nlogn)
   // sum weights and track indices. O(1) coin toss picks one. remove it.
@@ -58,6 +77,14 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // is the new start_0. 
   // e.g. sorted candidate array [a,b,c,d] and numSessions = 3.
   // start_0 = a. b conflicts. c conflicts. uh oh. can't find 3 sessions with a.
+  var startOfWeek = moment(intervals[0][0]).startOf('week');
+  var startsAts = sortedStartIndices.slice(-1*numSessions);
+
+  var startMoments =  _.map(startsAts, function(startAt){
+    return moment(startOfWeek).add('hours', startAt/2);
+  });
+  return startMoments;
+  
   // start_0 = b. c is fine. d is fine. return {b,c,d} as sessions.
   // running time is O(c^2) where c <= 336 is the number of candidates.
 

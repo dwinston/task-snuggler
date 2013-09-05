@@ -26,6 +26,6 @@ tsnug.evenlyDistributedMomentsFromNow = function(commitment) {
   // For each potential start, until it is safe, evaluate its neighbors,
   // with preference for an earlier start.
   // TODO
-
+  console.log(starts);
   return starts;
 };
