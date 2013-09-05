@@ -9,7 +9,6 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     return null;
   }
 
-
   // Return a list of inidces of possible times
   // Can do intersection later on with the indices of the preferences
   var availableStartIndices = [];
@@ -51,14 +50,13 @@ tsnug.learnedMomentsFromNow = function(commitment) {
       var tmpRank = timeRanking[index];
       // Use ranking for sorting, -1 for descending order
       if (tmpRank){
-        return tmpRank; // Use the preferences
+        return tmpRank*-1; // Use the preferences
       }else{
         // shuffle score-1 indices to get randomness for
         // slots without preferences.
-        return _.random(0,0.9); // Randomized number for rank=0
+        return _.random(-0.9,0); // Randomized number for rank=0
       }
     });
-  console.log(sortedStartIndices);
 
   // sort is O(nlogn)
   // sum weights and track indices. O(1) coin toss picks one. remove it.
@@ -77,15 +75,21 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // is the new start_0. 
   // e.g. sorted candidate array [a,b,c,d] and numSessions = 3.
   // start_0 = a. b conflicts. c conflicts. uh oh. can't find 3 sessions with a.
-  var startOfWeek = moment(intervals[0][0]).startOf('week');
-  var startsAts = sortedStartIndices.slice(-1*numSessions);
-
-  var startMoments =  _.map(startsAts, function(startAt){
-    return moment(startOfWeek).add('hours', startAt/2);
-  });
-  return startMoments;
-  
   // start_0 = b. c is fine. d is fine. return {b,c,d} as sessions.
-  // running time is O(c^2) where c <= 336 is the number of candidates.
+  // running time O(c^2) where c <= 336 is the number of candidates.
 
+  var startOfWeek = moment(intervals[0][0]).startOf('week');
+  var startMoments;
+  for (var index = 0; index<=sortedStartIndices.length-numSessions;index++){
+    var startsAts = sortedStartIndices.slice(index,index+numSessions);
+    startMoments =  _.map(startsAts, function(startAt){
+      return moment(startOfWeek).add('hours', startAt/2);
+    });
+    if (tsnug.noOverlapDurations(startMoments, hoursPerSession)){
+      break;
+    }else{
+      startMoments = [];
+    }
+  }
+  return startMoments;
 };
