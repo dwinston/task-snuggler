@@ -119,3 +119,20 @@ tsnug.findRoundingCandidates = function(pureMoment, includeCurrentMoment){
   }
   return candidates;
 };
+
+tsnug.noOverlapDurations = function(startMoments, hoursPerSession){
+  var numMoments = startMoments.length;
+  for (var i=0;i<numMoments-1;i++){
+    var firstMoment = startMoments[i];
+    for(var j =i+1;j<numMoments;j++){
+      var secondMoment = startMoments[j];
+      var difference = moment(firstMoment).diff(secondMoment, 'hours', true);
+      if (Math.abs(difference) < hoursPerSession){
+        // overlap happened as difference between starting points 
+        // is smaller than hours per session
+        return false; 
+      }
+    }
+  }
+  return true; // Overlap did not happen
+};
