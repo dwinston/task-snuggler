@@ -94,7 +94,8 @@ Meteor.startup(function () {
           numSessions: 3,
           hoursPerSession: 1,
           title: "Jog",
-          eventIds: []
+          eventIds: [],
+          prefs: {}
         }, 
         function (err, res) {
           generateEvents(res, defaultEventGenerationAlgorithm);
@@ -106,7 +107,8 @@ Meteor.startup(function () {
           numSessions: 2,
           hoursPerSession: 2,
           title: "Code",
-          eventIds: []
+          eventIds: [],
+          prefs: {}
         }, 
         function (err, res) {
           generateEvents(res, defaultEventGenerationAlgorithm);

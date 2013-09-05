@@ -70,3 +70,25 @@ tsnug.safeStarts = function (hoursPerSession) {
 
   return intervals;
 };
+
+tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
+  var commitment = Commitments.findOne(event.commitmentId);
+  if (commitment){
+    var start = moment(event.start);
+    var timeIndex = moment(start).diff(start.startOf('week'), 'hours', true)*2;
+    var prefs = commitment.prefs;
+    if (_.has(prefs, timeIndex)){
+      // Updates key-value pair if exist, adds 1 to it for now
+      prefs[timeIndex]+=1;
+    }else{
+      // Add new key-value pair if not exists, starts from 1
+      prefs[timeIndex]=1;
+    }
+    // Update preferences in the collection
+    Commitments.update(commitment._id, 
+                       {
+                         $set:{'prefs': prefs}
+                       }
+                      )
+  }
+};
