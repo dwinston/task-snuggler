@@ -92,3 +92,30 @@ tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
                       )
   }
 };
+
+tsnug.findRoundingCandidates = function(pureMoment, includeCurrentMoment){
+
+  // Shift pureMoment to the closest hour or half-hour if possible.
+  var pureMomentMinutes = pureMoment.minutes();
+  var hour = {startOf: moment(pureMoment).startOf('hour'),
+              middleOf: moment(pureMoment).startOf('hour').add('minutes', 30),
+              startOfNext: moment(pureMoment).startOf('hour').add('hours', 1)};
+  var candidates;
+  if (pureMomentMinutes >= 30) {
+    if (pureMomentMinutes >= 45) {
+      candidates = [hour.startOfNext, hour.middleOf]; // [45, 60)
+    } else {
+      candidates = [hour.middleOf, hour.startOfNext]; // [30, 45)
+    }
+  } else { // pureMomentMinutes <= 30
+    if (pureMomentMinutes < 15) {
+      candidates = [hour.startOf, hour.middleOf]; // [0, 15)
+    } else {
+      candidates = [hour.middleOf, hour.startOf]; // [15, 30)
+    }
+  }
+  if (includeCurrentMoment){
+    candidates.push(pureMoment);
+  }
+  return candidates;
+};
