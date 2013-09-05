@@ -34,7 +34,7 @@ Meteor.startup(function () {
       if (title) {
         Events.insert({
           userId: Meteor.userId(),
-          type: 'event',
+          commitmentId: 0,
 	  title: title,
 	  start: start,
 	  end: end,
@@ -50,7 +50,7 @@ Meteor.startup(function () {
 
     // Delete event by clicking on it
     eventClick: function(event, jsEvent, view) {
-      if (event.type === 'event'){
+      if (!event.commitmentId){
         var deleteFlag = confirm
         ('Do you really want to delete the ' + event.title + ' event?');
         if (deleteFlag) Events.remove(event._id);

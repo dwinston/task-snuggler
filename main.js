@@ -13,7 +13,6 @@ var insertCommitmentEvent = function (commitment, startsAt) {
   }
   Events.insert({
     userId: commitment.userId,
-    type: 'commitment',
     commitmentId: commitment._id,
     title: commitment.title,
     start: startsAt.toDate(),
