@@ -59,6 +59,7 @@ Meteor.startup(function () {
 
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+      tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
       Events.remove(event._id);
       Events.insert(event);
     }

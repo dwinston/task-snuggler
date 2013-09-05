@@ -14,6 +14,7 @@ var insertCommitmentEvent = function (commitment, startsAt) {
   Events.insert({
     userId: commitment.userId,
     type: 'commitment',
+    commitmentId: commitment._id,
     title: commitment.title,
     start: startsAt.toDate(),
     end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),
@@ -34,7 +35,7 @@ generateEvents = function (commitmentId, algorithm) {
       insertCommitmentEvent(commitment, startsAt);
     });
   } else if (algorithm.slice(-14) === "MomentsFromNow") {
-    var startsAts = fn(commitment.hoursPerSession, commitment.numSessions);
+    var startsAts = fn(commitment);
     _.each(startsAts, function (startsAt) {
       insertCommitmentEvent(commitment, startsAt);
     });

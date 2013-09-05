@@ -4,7 +4,10 @@
 //
 // A toy function to work out the mechanics of generating an array of 
 // mutually safe sessions.
-tsnug.evenlyDistributedMomentsFromNow = function(hoursPerSession,numSessions) {
+tsnug.evenlyDistributedMomentsFromNow = function(commitment) {
+
+  var hoursPerSession = commitment.hoursPerSession;
+  var numSessions = commitment.numSessions;
 
   var intervals = tsnug.safeStarts(hoursPerSession);
   if (_.isEmpty(intervals)) { 
