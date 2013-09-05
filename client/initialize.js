@@ -38,7 +38,8 @@ Meteor.startup(function () {
 	  title: title,
 	  start: start,
 	  end: end,
-	  allDay: allDay
+	  allDay: allDay, 
+          lastUpdated: moment()
 	});
       }
       calendar.fullCalendar('unselect');
@@ -59,8 +60,10 @@ Meteor.startup(function () {
 
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
-      tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
+      //tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
       Events.remove(event._id);
+      event.lastUpdated=moment();
+      console.log(event);
       Events.insert(event);
     }
   });

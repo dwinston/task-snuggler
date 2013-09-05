@@ -17,7 +17,8 @@ var insertCommitmentEvent = function (commitment, startsAt) {
     title: commitment.title,
     start: startsAt.toDate(),
     end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),
-    allDay: false
+    allDay: false,
+    lastUpdated: moment()
   }, function (err, res) {
     Commitments.update(commitment._id, {
       $push: {eventIds: res}});
