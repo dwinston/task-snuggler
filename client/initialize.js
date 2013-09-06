@@ -2,6 +2,35 @@ Meteor.subscribe("events");
 Meteor.subscribe("commitments");
 Session.setDefault("eventGenerationAlgorithm","safeRandomMomentFromNow"); 
 
+plotUpdate = function(){
+  var commitment = Commitments.findOne(Session.get("selected_commitment"));
+  var prefs = commitment.prefs;
+  var prefsKey = _.keys(prefs);
+  var plotPrefs = [];
+  _.each(prefsKey, function(key){
+    var tmpKey = moment().startOf('week').add('hour', key/2);
+    var tmpValue = prefs[key];
+    plotPrefs.push([tmpKey.toDate().getTime(), tmpValue]);
+  });
+  $.plot($("#placeholder"), [plotPrefs], 
+         {
+           xaxis:{
+             mode: "time",
+	     minTickSize: [1, "day"],
+             min:moment().startOf('week').toDate().getTime(), 
+             max:moment().endOf('week').toDate().getTime()
+           },
+           yaxis:{
+             minTickSize: 1
+           },
+           series: {
+	     bars: {
+	       show: true,
+	     }
+	   }
+         });
+}
+
 var shiftTime = function(t, dayDelta, minuteDelta) {
   return moment(t)
     .add('days',dayDelta)
@@ -10,7 +39,6 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 };
 
 Meteor.startup(function () {
-
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
   });
@@ -61,6 +89,7 @@ Meteor.startup(function () {
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
       tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
+      plotUpdate();
       Events.remove(event._id);
       event.lastUpdated=moment();
       Events.insert(event);

@@ -5,20 +5,12 @@ Template.dashboard.commitments = function () {
 Template.commitment.events({
   'click': function () {
     Session.set("selected_commitment", this._id);
+    plotUpdate();    
   }
 });
 
 Template.commitment.selected = function () {
   return Session.equals("selected_commitment", this._id) ? "selected" : '';
-};
-
-Template.dashboard.commitmentDetails = function() {
-  var tmp = Commitments.findOne(Session.get("selected_commitment"));
-  return tmp && 
-    _.map(tmp.eventIds, function(id) {
-      var evt = Events.findOne(id);
-      return evt;
-    });
 };
 
 Template.dashboard.events({
