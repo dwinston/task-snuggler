@@ -24,6 +24,9 @@
       </div>
     </div>
   </div>
+  <footer>
+    {{> copyright}}
+  </footer>
 </body>
 
 <template name="addEvent">
@@ -110,4 +113,11 @@
 <template name="calendar">
   <div id="calendar">
   </div>
+</template>
+
+<template name="copyright">
+  <center>
+    Copyright &copy; {{yearOfProduction}}
+    Donny & Cameron
+  </center>
 </template>
