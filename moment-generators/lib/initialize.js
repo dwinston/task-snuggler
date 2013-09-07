@@ -120,12 +120,15 @@ tsnug.findRoundingCandidates = function(pureMoment, includeCurrentMoment){
   return candidates;
 };
 
+// Function to check whether a number of events from commitment
+// overlap with each other
 tsnug.noOverlapDurations = function(startMoments, hoursPerSession){
   var numMoments = startMoments.length;
   for (var i=0;i<numMoments-1;i++){
     var firstMoment = startMoments[i];
     for(var j =i+1;j<numMoments;j++){
       var secondMoment = startMoments[j];
+      // Find difference between start moments 
       var difference = moment(firstMoment).diff(secondMoment, 'hours', true);
       if (Math.abs(difference) < hoursPerSession){
         // overlap happened as difference between starting points 

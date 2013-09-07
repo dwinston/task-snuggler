@@ -9,8 +9,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     return null;
   }
 
-  // Return a list of inidces of possible times
-  // Can do intersection later on with the indices of the preferences
+  // Return a list of inidces of possible time slots
   var availableStartIndices = [];
   _.each(intervals, function(interval){
     var candidates = tsnug.findRoundingCandidates(interval[0], false);
@@ -35,61 +34,62 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   var timeRanking =
     _.map(availableStartIndices, function(availableStartIndex){
       if (_.has(prefs, availableStartIndex)){
-        return prefs[availableStartIndex];
+        // -1 for sorting to be ascending order, 
+        // so large scores come first
+        return -1*prefs[availableStartIndex];
       }else{
-        return 0;
+        // Random number for pref=0
+        // to shuffle time slots without preference
+        return _.random(-0.9,0);
       }
     });
 
-  // If available, add preference weight if specified
-  //[0,0,1,6]
-  // sort array in ascending order and dump unavailables at end
-  //[3,2]
+  // sort available start indices array in ascending order
   var sortedStartIndices = 
     _.sortBy(availableStartIndices, function(num, index){
-      var tmpRank = timeRanking[index];
-      // Use ranking for sorting, -1 for descending order
-      if (tmpRank){
-        return tmpRank*-1; // Use the preferences
-      }else{
-        // shuffle score-1 indices to get randomness for
-        // slots without preferences.
-        return _.random(-0.9,0); // Randomized number for rank=0
-      }
+      return timeRanking[index];
     });
-
-  // sort is O(nlogn)
-  // sum weights and track indices. O(1) coin toss picks one. remove it.
-  // sutract its weight from sum and shift indices. repeat. in this way we'll 
-  // generate an ordering of all n candidates in O(n) time? maybe O(n^2).
-
-  // sanity check to see if numSessions sessions of duration hoursPerSession
-  // are possible:
-  // (1) numSessions * (hoursPerSession * 2) > numCandidates => error
-  // (2) greedily occupy safe slots and see that this is possible.
-
-  // run through candidate starts, keep track of first picked start_0,
-  // and try to find numSessions of them (start_0 .. start_(numSessions-1)).
-  // If cannot find numSessions of them, then have first pick be
-  // after last first pick, i.e. the choice after start_0 in the array. This
-  // is the new start_0. 
-  // e.g. sorted candidate array [a,b,c,d] and numSessions = 3.
-  // start_0 = a. b conflicts. c conflicts. uh oh. can't find 3 sessions with a.
-  // start_0 = b. c is fine. d is fine. return {b,c,d} as sessions.
-  // running time O(c^2) where c <= 336 is the number of candidates.
 
   var startOfWeek = moment(intervals[0][0]).startOf('week');
   var startMoments;
+  
+  // Find possible start moments according to the numSessions
   for (var index = 0; index<=sortedStartIndices.length-numSessions;index++){
     var startsAts = sortedStartIndices.slice(index,index+numSessions);
     startMoments =  _.map(startsAts, function(startAt){
       return moment(startOfWeek).add('hours', startAt/2);
     });
+    // Check if the scheduled commitments overlap with each other
     if (tsnug.noOverlapDurations(startMoments, hoursPerSession)){
+      // No overlap, DONE
       break;
     }else{
+      // Overlap happened, try again with another set
       startMoments = [];
     }
   }
   return startMoments;
 };
+
+// Other comments
+
+// sort is O(nlogn)
+// sum weights and track indices. O(1) coin toss picks one. remove it.
+// sutract its weight from sum and shift indices. repeat. in this way we'll 
+// generate an ordering of all n candidates in O(n) time? maybe O(n^2).
+
+// To do:
+// sanity check to see if numSessions sessions of duration hoursPerSession
+// are possible:
+// (1) numSessions * (hoursPerSession * 2) > numCandidates => error
+// (2) greedily occupy safe slots and see that this is possible.
+
+// run through candidate starts, keep track of first picked start_0,
+// and try to find numSessions of them (start_0 .. start_(numSessions-1)).
+// If cannot find numSessions of them, then have first pick be
+// after last first pick, i.e. the choice after start_0 in the array. This
+// is the new start_0. 
+// e.g. sorted candidate array [a,b,c,d] and numSessions = 3.
+// start_0 = a. b conflicts. c conflicts. uh oh. can't find 3 sessions with a.
+// start_0 = b. c is fine. d is fine. return {b,c,d} as sessions.
+// running time O(c^2) where c <= 336 is the number of candidates.
