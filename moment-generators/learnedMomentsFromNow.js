@@ -9,18 +9,18 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     return null;
   }
 
-  // Return a list of inidces of possible time slots
+  // Return a list of indices of possible time slots
   var availableStartIndices = [];
   _.each(intervals, function(interval){
     var candidates = tsnug.findRoundingCandidates(interval[0], false);
     var candidate = _.find(candidates, function (candidate) {
       return tsnug.contains(interval, candidate);
     });
+    var timeIndex = 
+      moment(candidate).diff(
+        moment(candidate).startOf('week'), 'hours', true)*2;
     while(tsnug.contains(interval, candidate)){
-      var timeIndex = 
-        moment(candidate).diff(
-          moment(candidate).startOf('week'), 'hours', true)*2;
-      availableStartIndices.push(timeIndex);
+      availableStartIndices.push(timeIndex++);
       candidate.add('hours', 0.5);
     }
   });
