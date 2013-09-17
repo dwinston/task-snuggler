@@ -75,6 +75,9 @@ tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
   var commitment = Commitments.findOne(event.commitmentId);
   if (commitment){
     var start = moment(event.start);
+    if (typeof minuteDelta === "number") {
+      start = start.subtract('days',dayDelta).subtract('minutes',minuteDelta);
+    } // otherwise, this event is being removed
     var timeIndex = moment(start).diff(start.startOf('week'), 'hours', true)*2;
     var prefs = commitment.prefs;
     if (_.has(prefs, timeIndex)){
@@ -87,7 +90,7 @@ tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
     // Update preferences in the collection
     Commitments.update(commitment._id, 
                        {
-                         $set:{'prefs': prefs}
+                         $set:{prefs: prefs}
                        }
                       )
   }
