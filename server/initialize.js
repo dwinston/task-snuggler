@@ -67,7 +67,7 @@ Meteor.startup(function () {
 
     _.each(events, function (evt) {
       Events.insert(_.extend(evt, {
-        lastUpdated = moment().toDate(),
+        lastUpdated: moment().toDate(),
         commitmentId: 0,
         allDay: false
       }));
