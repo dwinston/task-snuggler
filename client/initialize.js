@@ -63,12 +63,11 @@ Meteor.startup(function () {
         Events.insert({
           userId: Meteor.userId(),
           commitmentId: 0,
-	  title: title,
-	  start: start,
-	  end: end,
-	  allDay: allDay, 
-          lastUpdated: moment()
-	});
+	        title: title,
+	        start: start,
+	        end: end,
+	        allDay: allDay
+	      });
       }
       calendar.fullCalendar('unselect');
     },
@@ -91,7 +90,7 @@ Meteor.startup(function () {
       tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
       plotUpdate();
       Events.remove(event._id);
-      event.lastUpdated=moment();
+      event.lastUpdated = moment().toDate();
       Events.insert(event);
     }
   });
