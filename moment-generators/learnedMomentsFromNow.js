@@ -38,9 +38,9 @@ tsnug.learnedMomentsFromNow = function(commitment) {
         // so large scores come first
         return -1*prefs[availableStartIndex];
       }else{
-        // Random number for pref=0
+        // Random number in the range (-1, 0]
         // to shuffle time slots without preference
-        return _.random(-0.9,0);
+        return -Math.random();
       }
     });
 
