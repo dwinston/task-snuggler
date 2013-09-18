@@ -73,39 +73,37 @@ tsnug.safeStarts = function (hoursPerSession) {
 
 tsnug.updateCommitmentPreferences = function(event){
   var commitment = Commitments.findOne(event.commitmentId);
-  if (commitment){
-    var start = moment(event.start);
-    var timeIndex = moment(start).diff(start.startOf('week'), 'hours', true)*2;
-    var prefs = commitment.prefs;
-    if (_.has(prefs, timeIndex)){
-      // Updates key-value pair if exist, adds 1 to it for now
-      prefs[timeIndex]+=1;
-    }else{
-      // Add new key-value pair if not exists, starts from 1
-      prefs[timeIndex]=1;
-    }
-    // Was this event dropped very recently? 
-    // If so, negate momentary preference.
-    var lastEventDrop = Session.get("lastEventDrop");
-    if (lastEventDrop && (lastEventDrop.eventId === event._id) && 
-        (moment().diff(moment(lastEventDrop.lastUpdated), 'seconds') < 10)) {
-      prefs[lastEventDrop.timeIndex] -= 1;
-    }
+  if (!commitment) { return; }
 
-    // Could set this as callback to DB update, but would miss out
-    // on very rapid changes. Because server is not expected to disagree
-    // with client action, we choose to set this Session variable immediately.
-    Session.set("lastEventDrop", {
-      eventId: event._id, 
-      timeIndex: timeIndex, 
-      lastUpdated: moment().toDate()
-    });
+  var start = moment(event.start);
+  var timeIndex = 2 * moment(start).diff(start.startOf('week'), 'hours', true);
+  var increments = {}; // which preferences to adjust, and by how much
+  var lastEventDrop = Session.get("lastEventDrop"), lastUpdated;
 
-    // Update preferences in the collection
-    Commitments.update(commitment._id, {
-      $set:{prefs: prefs}
-    });
+  // If a field is undefined, $inc sets that field to the specified amount, 
+  // so we need not worry that commitment.prefs[timeIndex] is undefined.
+  // http://docs.mongodb.org/manual/reference/operator/inc/
+  increments['prefs.'+timeIndex] = 1;
+
+  // Was the last preference for this event expressed very briefly? 
+  // If so, cancel that last preference.
+  if (lastEventDrop && (lastEventDrop.eventId === event._id)) {
+    lastUpdated = moment(lastEventDrop.lastUpdated);
+    if (moment().diff(lastUpdated, 'seconds') < 10) {
+      increments['prefs.'+lastEventDrop.timeIndex] = -1;
+    }
   }
+
+  Commitments.update(commitment._id, {$inc: increments});
+
+  // Could set this as callback to DB update, but would miss out
+  // on very rapid changes. Because server is not expected to disagree
+  // with client action, we choose to set this Session variable immediately.
+  Session.set("lastEventDrop", {
+    eventId: event._id, 
+    timeIndex: timeIndex, 
+    lastUpdated: moment().toDate()
+  });
 };
 
 tsnug.findRoundingCandidates = function(pureMoment, includeCurrentMoment){
