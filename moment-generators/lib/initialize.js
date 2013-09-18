@@ -71,13 +71,10 @@ tsnug.safeStarts = function (hoursPerSession) {
   return intervals;
 };
 
-tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
+tsnug.updateCommitmentPreferences = function(event){
   var commitment = Commitments.findOne(event.commitmentId);
   if (commitment){
     var start = moment(event.start);
-    if (typeof minuteDelta === "number") {
-      start = start.subtract('days',dayDelta).subtract('minutes',minuteDelta);
-    } // otherwise, this event is being removed
     var timeIndex = moment(start).diff(start.startOf('week'), 'hours', true)*2;
     var prefs = commitment.prefs;
     if (_.has(prefs, timeIndex)){
@@ -87,12 +84,27 @@ tsnug.updateCommitmentPreferences = function(event, dayDelta, minuteDelta){
       // Add new key-value pair if not exists, starts from 1
       prefs[timeIndex]=1;
     }
+    // Was this event dropped very recently? 
+    // If so, negate momentary preference.
+    var lastEventDrop = Session.get("lastEventDrop");
+    if (lastEventDrop && (lastEventDrop.eventId === event._id) && 
+        (moment().diff(moment(lastEventDrop.lastUpdated), 'seconds') < 10)) {
+      prefs[lastEventDrop.timeIndex] -= 1;
+    }
+
+    // Could set this as callback to DB update, but would miss out
+    // on very rapid changes. Because server is not expected to disagree
+    // with client action, we choose to set this Session variable immediately.
+    Session.set("lastEventDrop", {
+      eventId: event._id, 
+      timeIndex: timeIndex, 
+      lastUpdated: moment().toDate()
+    });
+
     // Update preferences in the collection
-    Commitments.update(commitment._id, 
-                       {
-                         $set:{prefs: prefs}
-                       }
-                      )
+    Commitments.update(commitment._id, {
+      $set:{prefs: prefs}
+    });
   }
 };
 
