@@ -25,9 +25,6 @@ Template.dashboard.events({
     evt.preventDefault();
     var commitment = Commitments.findOne(Session.get("selected_commitment"));
     _.each(commitment.eventIds, function(id){
-      //TODO: preferences should update here, but the following
-      // line does result in a responsive plot.
-      tsnug.updateCommitmentPreferences(event);
       Events.remove(id);
     });
     Commitments.update(
