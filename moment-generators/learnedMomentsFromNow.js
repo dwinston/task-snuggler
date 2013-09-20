@@ -1,6 +1,7 @@
 tsnug.learnedMomentsFromNow = function(commitment) {
 
   var hoursPerSession = commitment.hoursPerSession;
+  var sessionIndexSpan = hoursPerSession * 2;
   var numSessions = commitment.numSessions;
   
   // obtain intervals of safe starts
@@ -9,7 +10,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     return null;
   }
 
-  // Return a list of indices of possible time slots
+  // Return a list of indices of possible start times, in ascending order.
   var availableStartIndices = [];
   _.each(intervals, function(interval){
     var candidates = tsnug.findRoundingCandidates(interval[0], false);
@@ -25,37 +26,42 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     }
   });
 
-  // retrieve of key-value store of preferences
-  // of form (startIndex, weight)
-  // e.g. {(1,3),(3,5)} means that Sun 12:30am has weight 3
-  // and Sun 01:30am has weight 5.
-  //[0,3,0,5]
-  var prefs = commitment.prefs;
-  var timeRanking =
-    _.map(availableStartIndices, function(availableStartIndex){
-      if (_.has(prefs, availableStartIndex)){
-        // -1 for sorting to be ascending order, 
-        // so large scores come first
-        return -1*prefs[availableStartIndex];
-      }else{
-        // Random number in the range (-1, 0]
-        // to shuffle time slots without preference
-        return -Math.random();
-      }
-    });
+  // Sanity checks: given availableStartIndices, is it possible to generate 
+  // numSessions sessions of duration hoursPerSession?
+  // Check 1: Simple arithmetic. Necessary but insufficient.
+  if (numSessions * sessionIndexSpan > availableStartIndices.length) return [];
+  // Check 2: A greedy solution. Assumes ascending availableStartIndices.
+  var sessionCount = 0;
+  var lastStartIdx = -sessionIndexSpan;
+  for (var i=0; i < availableStartIndices.length; i++) {
+    if (availableStartIndices[i] < lastStartIdx + sessionIndexSpan) continue; 
+    if (++sessionCount === numSessions) break;
+    lastStartIdx = availableStartIndices[i];
+  } 
+  if (sessionCount < numSessions) return [];
 
-  // sort available start indices array in ascending order
-  var sortedStartIndices = 
-    _.sortBy(availableStartIndices, function(num, index){
-      return timeRanking[index];
-    });
+  // From preferences, generate ranking of available start indices.
+  // Indices without preference are to be shuffled via randomly assigned
+  // ranks in the range (-1, 0].
+  // E.g., [{startIndex: 1, rank: -3},{startIndex: 3, rank: -5}] 
+  // means that Sun 12:30am has weight 3 and Sun 01:30am has weight 5.
+  // Ranking is by absolute value.
+  var prefs = commitment.prefs;
+  var indexRank = _.map(availableStartIndices, function(i) { 
+    return {
+      index: i, 
+      rank: _.has(prefs, i) ? -prefs[i] : -Math.random()
+    };
+  });
+  var rankedIndices = _.pluck(_.sortBy(indexRank, 'rank'), 'index');
 
   var startOfWeek = moment(intervals[0][0]).startOf('week');
   var startMoments;
+
   
   // Find possible start moments according to the numSessions
-  for (var index = 0; index<=sortedStartIndices.length-numSessions;index++){
-    var startsAts = sortedStartIndices.slice(index,index+numSessions);
+  for (var index = 0; index<=rankedIndices.length-numSessions;index++){
+    var startsAts = rankedIndices.slice(index,index+numSessions);
     startMoments =  _.map(startsAts, function(startAt){
       return moment(startOfWeek).add('hours', startAt/2);
     });
@@ -79,10 +85,6 @@ tsnug.learnedMomentsFromNow = function(commitment) {
 // generate an ordering of all n candidates in O(n) time? maybe O(n^2).
 
 // To do:
-// sanity check to see if numSessions sessions of duration hoursPerSession
-// are possible:
-// (1) numSessions * (hoursPerSession * 2) > numCandidates => error
-// (2) greedily occupy safe slots and see that this is possible.
 
 // run through candidate starts, keep track of first picked start_0,
 // and try to find numSessions of them (start_0 .. start_(numSessions-1)).
