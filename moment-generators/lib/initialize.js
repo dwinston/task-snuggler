@@ -4,9 +4,10 @@ tsnug.contains = function(interval, m) {
   return (m >= interval[0] && m <= interval[1]);
 }
 
+// Generates a array of safe intervals for start times,
+// of the form [[start0,end0],[start1,end1],...],
+// ascending in time.
 tsnug.safeStarts = function (hoursPerSession) {
-  // Generate an array of safe intervals of the form
-  // [[start0,end0],[start1,end1],...]
   var intervals = [];
   var start0 = moment();
   var endN = moment().endOf('week');
