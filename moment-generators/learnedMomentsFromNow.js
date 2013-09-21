@@ -55,43 +55,46 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   });
   var rankedIndices = _.pluck(_.sortBy(indexRank, 'rank'), 'index');
 
-  var startOfWeek = moment(intervals[0][0]).startOf('week');
-  var startMoments;
-
-  
-  // Find possible start moments according to the numSessions
-  for (var index = 0; index<=rankedIndices.length-numSessions;index++){
-    var startsAts = rankedIndices.slice(index,index+numSessions);
-    startMoments =  _.map(startsAts, function(startAt){
-      return moment(startOfWeek).add('hours', startAt/2);
+  // Generate an array of numSessions moments, each the start of a session.
+  // Priority is successively given to each index by rank. While priority by
+  // sum-of-weights would intuitively be more ideal, such a solution requires
+  // exponential space.
+  var startAts;
+  var iMax = rankedIndices.length - 1;
+  var k = numSessions;
+  var candidate = new Array(k);
+  candidate[0] = 0;
+  var compatibleCandidate = function (cIdx) {
+    var maybe = rankedIndices[candidate[cIdx]];
+    var already;
+    _.every(candidate.slice(0,cIdx), function (c) {
+      already = rankedIndices[c];
+      return !tsnug.contains([already, already + sessionIndexSpan],
+                             maybe);
     });
-    // Check if the scheduled commitments overlap with each other
-    if (tsnug.noOverlapDurations(startMoments, hoursPerSession)){
-      // No overlap, DONE
-      break;
-    }else{
-      // Overlap happened, try again with another set
-      startMoments = [];
+  };
+  var cIdx = 0;
+  while (candidate[0] + (k-1) <= iMax) {
+    if (compatibleCandidate(cIdx)) {
+      if (cIdx === k - 1) { 
+        startAts = _.map(candidate, function (c) { 
+          return rankedIndices[c]; 
+        });
+        break;
+      }
+      candidate[cIdx+1] = candidate[cIdx] + 1;
+      cIdx++;
+    } else if (candidate[cIdx] + k > iMax) { // backtrack
+      candidate[cIdx-1] += 1;
+      cIdx--;
+    } else {
+      candidate[cIdx] += 1;
     }
   }
-  return startMoments;
+  if (candidate[0] > iMax - (k-1)) return [];
+
+  var startOfWeek = moment(intervals[0][0]).startOf('week');
+  return _.map(startAts, function(startAt){
+    return moment(startOfWeek).add('hours', startAt/2);
+  });
 };
-
-// Other comments
-
-// sort is O(nlogn)
-// sum weights and track indices. O(1) coin toss picks one. remove it.
-// sutract its weight from sum and shift indices. repeat. in this way we'll 
-// generate an ordering of all n candidates in O(n) time? maybe O(n^2).
-
-// To do:
-
-// run through candidate starts, keep track of first picked start_0,
-// and try to find numSessions of them (start_0 .. start_(numSessions-1)).
-// If cannot find numSessions of them, then have first pick be
-// after last first pick, i.e. the choice after start_0 in the array. This
-// is the new start_0. 
-// e.g. sorted candidate array [a,b,c,d] and numSessions = 3.
-// start_0 = a. b conflicts. c conflicts. uh oh. can't find 3 sessions with a.
-// start_0 = b. c is fine. d is fine. return {b,c,d} as sessions.
-// running time O(c^2) where c <= 336 is the number of candidates.
