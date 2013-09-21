@@ -1,7 +1,7 @@
 tsnug = {};
 
 tsnug.contains = function(interval, m) {
-  return (m >= interval[0] && m <= interval[1]);
+  return (m >= interval[0] && m < interval[1]);
 }
 
 // Generates a array of safe intervals for start times,
