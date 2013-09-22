@@ -59,28 +59,29 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // Priority is successively given to each index by rank. While priority by
   // sum-of-weights would intuitively be more ideal, such a solution requires
   // exponential space.
-  var startAts;
   var iMax = rankedIndices.length - 1;
+
+  // Each element in candidate represents an index in rankedIndices
   var candidate = new Array(numSessions);
   candidate[0] = 0;
+
+  // Function to check collision of a new event with allocated events
   var compatibleCandidate = function (cIdx) {
-    var maybe = rankedIndices[candidate[cIdx]];
-    var already;
-    var compatible=_.every(candidate.slice(0,cIdx), function (c) {
-      already = rankedIndices[c];
-      return !tsnug.contains([already, already + sessionIndexSpan],
-                             maybe);
+    var cTimeIndex = rankedIndices[candidate[cIdx]];
+    var allocatedInterval;
+    var tmp;
+    return _.every(candidate.slice(0,cIdx), function (c) {
+      tmp = rankedIndices[c];
+      allocatedInterval = [tmp, tmp + sessionIndexSpan];      
+      return !tsnug.contains(allocatedInterval, cTimeIndex);
     });
-    return compatible;
   };
 
   var cIdx = 0;
   while (candidate[0] + (numSessions-1) <= iMax) {
     if (compatibleCandidate(cIdx)) {
+      // Terminates when last session is compatible
       if (cIdx === numSessions - 1) { 
-        startAts = _.map(candidate, function (c) { 
-          return rankedIndices[c]; 
-        });
         break;
       }
       candidate[cIdx+1] = candidate[cIdx] + 1;
@@ -94,6 +95,9 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   }
   if (candidate[0] > iMax - (numSessions-1)) return [];
 
+  var startAts = _.map(candidate, function (c) { 
+    return rankedIndices[c]; 
+  });
   var startOfWeek = moment(intervals[0][0]).startOf('week');
   return _.map(startAts, function(startAt){
     return moment(startOfWeek).add('hours', startAt/2);
