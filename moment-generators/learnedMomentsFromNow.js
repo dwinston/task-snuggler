@@ -61,22 +61,23 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // exponential space.
   var startAts;
   var iMax = rankedIndices.length - 1;
-  var k = numSessions;
-  var candidate = new Array(k);
+  var candidate = new Array(numSessions);
   candidate[0] = 0;
   var compatibleCandidate = function (cIdx) {
     var maybe = rankedIndices[candidate[cIdx]];
     var already;
-    _.every(candidate.slice(0,cIdx), function (c) {
+    var compatible=_.every(candidate.slice(0,cIdx), function (c) {
       already = rankedIndices[c];
       return !tsnug.contains([already, already + sessionIndexSpan],
                              maybe);
     });
+    return compatible;
   };
+
   var cIdx = 0;
-  while (candidate[0] + (k-1) <= iMax) {
+  while (candidate[0] + (numSessions-1) <= iMax) {
     if (compatibleCandidate(cIdx)) {
-      if (cIdx === k - 1) { 
+      if (cIdx === numSessions - 1) { 
         startAts = _.map(candidate, function (c) { 
           return rankedIndices[c]; 
         });
@@ -84,14 +85,14 @@ tsnug.learnedMomentsFromNow = function(commitment) {
       }
       candidate[cIdx+1] = candidate[cIdx] + 1;
       cIdx++;
-    } else if (candidate[cIdx] + k > iMax) { // backtrack
+    } else if (candidate[cIdx] + numSessions > iMax) { // backtrack
       candidate[cIdx-1] += 1;
       cIdx--;
     } else {
       candidate[cIdx] += 1;
     }
   }
-  if (candidate[0] > iMax - (k-1)) return [];
+  if (candidate[0] > iMax - (numSessions-1)) return [];
 
   var startOfWeek = moment(intervals[0][0]).startOf('week');
   return _.map(startAts, function(startAt){
