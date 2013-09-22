@@ -25,45 +25,48 @@ Meteor.startup(function () {
     var y = now.year();
     var events = [
       {
-	      userId: donnyId,
+	userId: donnyId,
         title: 'Meeting',
-	      start: new Date(y, m, d+2, 9, 30),
-	      end: new Date(y, m, d+2, 10, 30)
+	start: new Date(y, m, d+2, 9, 30),
+	end: new Date(y, m, d+2, 10, 30)
       },
       {
-	      userId: cameronId,
-        title: 'Lunch',
-	      start: new Date(y, m, d+1, 12, 0),
-	      end: new Date(y, m, d+1, 14, 0)
-      },
-      {
-	      userId: donnyId,
+	userId: donnyId,
         title: 'Birthday Party',
-	      start: new Date(y, m, d+3, 16, 0),
-	      end: new Date(y, m, d+3, 18, 30)
-      },
-      {
-	      userId: cameronId,
-        title: 'Hacking',
-	      start: new Date(y, m, d+5, 16, 0),
-	      end: new Date(y, m, d+5, 18, 30)
+	start: new Date(y, m, d+3, 16, 0),
+	end: new Date(y, m, d+3, 18, 30)
       },	    
       {
-	      userId: donnyId,
+	userId: donnyId,
         title: 'Ultimate Frisbee',
-	      start: new Date(y, m, d+6, 12, 0),
-	      end: new Date(y, m, d+6, 14, 0)
-      }
-    ];
-
-    for (var offset=-1; offset<7; offset++){
-      events.push({
+	start: new Date(y, m, d+6, 12, 0),
+	end: new Date(y, m, d+6, 14, 0)
+      }, 
+      {
         userId: cameronId,
-        title: 'Sleep',
-        start: new Date(y,m,d+offset,21,0),
-        end: new Date(y,m,d+offset+1,9,0)
-      });
-    }
+        title: 'Occupy 1',
+        start: new Date(y, m, d, 0, 0),
+        end: new Date(y, m, d+6, 12, 0)
+      },
+      {
+        userId: cameronId,
+        title: 'Occupy 2',
+        start: new Date(y ,m, d+6, 17, 0),
+        end: new Date(y, m, d+7, 0, 0)
+      }, 
+      {
+        userId: cameronId,
+        title: 'Break 1',
+        start: new Date(y, m, d+6, 13, 0),
+        end: new Date(y, m, d+6, 14, 0)
+      }, 
+      {
+        userId: cameronId,
+        title: 'Break 2',
+        start: new Date(y, m, d+6, 15, 0),
+        end: new Date(y, m, d+6, 16, 0)
+      },     
+    ];
 
     _.each(events, function (evt) {
       Events.insert(_.extend(evt, {
@@ -91,7 +94,7 @@ Meteor.startup(function () {
         {
           userId: cameronId,
           numSessions: 2,
-          hoursPerSession: 2,
+          hoursPerSession: 1,
           title: "Code",
           eventIds: [],
           prefs: {}
