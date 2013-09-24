@@ -29,7 +29,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // Sanity checks: given availableStartIndices, is it possible to generate 
   // numSessions sessions of duration hoursPerSession?
   // Check 1: Simple arithmetic. Necessary but insufficient.
-  if (numSessions * sessionIndexSpan > availableStartIndices.length) return [];
+  if (numSessions > availableStartIndices.length) return [];
   // Check 2: A greedy solution. Assumes ascending availableStartIndices.
   var sessionCount = 0;
   var lastStartIdx = -sessionIndexSpan;
