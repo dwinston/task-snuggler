@@ -15,6 +15,7 @@ Template.commitment.selected = function () {
 
 Template.dashboard.events({
   "click #removeCommitment": function (evt, templ){
+    evt.preventDefault();
     var commitment = Commitments.findOne(Session.get("selected_commitment"));
     _.each(commitment.eventIds, function(id){
       Events.remove(id);
