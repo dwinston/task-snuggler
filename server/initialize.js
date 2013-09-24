@@ -16,7 +16,7 @@ Meteor.startup(function () {
   var cameronId = Meteor.users.findOne({username: "cameron"})._id;
   var donnyId = Meteor.users.findOne({username: "donny"})._id;
 
-  var defaultEventGenerationAlgorithm = "safeRandomMomentFromNow";
+  var defaultEventGenerationAlgorithm = "learnedMomentsFromNow";
   
   if (Events.find().count() === 0) { 
     var now = moment().startOf('week');

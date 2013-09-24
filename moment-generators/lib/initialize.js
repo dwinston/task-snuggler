@@ -90,7 +90,7 @@ tsnug.updateCommitmentPreferences = function(event){
   // If so, cancel that last preference.
   if (lastEventDrop && (lastEventDrop.eventId === event._id)) {
     lastUpdated = moment(lastEventDrop.lastUpdated);
-    if (moment().diff(lastUpdated, 'seconds') < 10) {
+    if (moment().diff(lastUpdated, 'seconds') < Session.get("scratchTime")) {
       increments['prefs.'+lastEventDrop.timeIndex] = -1;
     }
   }

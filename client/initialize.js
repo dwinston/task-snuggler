@@ -1,6 +1,7 @@
 Meteor.subscribe("events");
 Meteor.subscribe("commitments");
-Session.setDefault("eventGenerationAlgorithm","safeRandomMomentFromNow"); 
+Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
+Session.setDefault("scratchTime", 10); // seconds before new pref persists
 
 plotUpdate = function(){
   var commitment = Commitments.findOne(Session.get("selected_commitment"));
