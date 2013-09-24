@@ -44,9 +44,5 @@ Template.dashboard.events({
         }
       }
     );
-  },
-  "change #algorithmSelection": function (evt, templ) {
-    Session.set("eventGenerationAlgorithm", 
-                templ.find("#algorithmSelection").value);
   }
 });
