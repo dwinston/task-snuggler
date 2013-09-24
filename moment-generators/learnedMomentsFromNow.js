@@ -7,7 +7,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
   // obtain intervals of safe starts
   var intervals = tsnug.safeStarts(hoursPerSession);
   if (_.isEmpty(intervals)) { 
-    return null;
+    return [];
   }
 
   // Return a list of indices of possible start times, in ascending order.
@@ -72,7 +72,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     var tmp;
     return _.every(candidate.slice(0,cIdx), function (c) {
       tmp = rankedIndices[c];
-      allocatedInterval = [tmp, tmp + sessionIndexSpan];      
+      allocatedInterval = [tmp, tmp + sessionIndexSpan - 1];      
       return !tsnug.contains(allocatedInterval, cTimeIndex);
     });
   };
@@ -84,16 +84,14 @@ tsnug.learnedMomentsFromNow = function(commitment) {
       if (cIdx === numSessions - 1) { 
         break;
       }
-      candidate[cIdx+1] = candidate[cIdx] + 1;
       cIdx++;
-    } else if (candidate[cIdx] + numSessions > iMax) { // backtrack
-      candidate[cIdx-1] += 1;
+      candidate[cIdx] = candidate[cIdx-1];
+    } else if (candidate[cIdx] + ((numSessions-cIdx)-1) > iMax) { // backtrack
       cIdx--;
-    } else {
-      candidate[cIdx] += 1;
     }
+    candidate[cIdx] += 1;
   }
-  if (candidate[0] > iMax - (numSessions-1)) return [];
+  if (candidate[0] + (numSessions-1) > iMax) return [];
 
   var startAts = _.map(candidate, function (c) { 
     return rankedIndices[c]; 
