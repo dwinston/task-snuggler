@@ -7,13 +7,14 @@ tsnug.contains = function(interval, m) {
 // Generates a array of safe intervals for start times,
 // of the form [[start0,end0],[start1,end1],...],
 // ascending in time.
-tsnug.safeStarts = function (hoursPerSession) {
+tsnug.safeStarts = function (userId, hoursPerSession) {
   var intervals = [];
   var start0 = moment();
   var endN = moment().endOf('week');
   // Grab events that start or end between now and the
   // end of the week.
   var events = Events.find({
+    userId: userId,
     $or: [{
       $and: [{start: {$gte: start0.toDate()}}, 
              {start: {$lt: endN.toDate()}}]
