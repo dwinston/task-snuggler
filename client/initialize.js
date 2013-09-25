@@ -1,5 +1,6 @@
 Meteor.subscribe("events");
 Meteor.subscribe("commitments");
+Meteor.subscribe("userData");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
 
@@ -41,6 +42,9 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 
 Meteor.startup(function () {
   Accounts.ui.config({
+    requestPermissions: {
+      google: ['openid','email','https://www.googleapis.com/auth/calendar.readonly']
+    },
     passwordSignupFields: 'USERNAME_ONLY'
   });
   
@@ -95,7 +99,7 @@ Meteor.startup(function () {
       Events.insert(event);
     }
   });
-
+  
   Deps.autorun(function () {
     Events.find();
     $('#calendar').fullCalendar(
