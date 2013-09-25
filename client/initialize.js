@@ -43,7 +43,8 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 Meteor.startup(function () {
   Accounts.ui.config({
     requestPermissions: {
-      google: ['openid','email','https://www.googleapis.com/auth/calendar.readonly']
+      google: ['openid','email',
+               'https://www.googleapis.com/auth/calendar.readonly']
     },
     passwordSignupFields: 'USERNAME_ONLY'
   });
