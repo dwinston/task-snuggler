@@ -1,4 +1,14 @@
 Meteor.startup(function () {
+  // first, remove configuration entry in case service is already configured
+  Accounts.loginServiceConfiguration.remove({
+    service: "google"
+  });
+  Accounts.loginServiceConfiguration.insert({
+    service: "google",
+    clientId: "49998162042.apps.googleusercontent.com",
+    secret: "mqQn-Ej6GJAxEIoSnOBAzLqh"
+  });
+
   // These will be nuked upon 'meteor reset'.
   // To reset e.g. events and commitments,
   // do 'meteor mongo' and then
