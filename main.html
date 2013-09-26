@@ -12,7 +12,7 @@
     <div class="row-fluid">
       <div class="span6">
         <div class="span12">
-          {{> addEvent}}
+          {{> instruction}}
           {{> inputForm}}
         </div>
         <div class="span12">
@@ -29,11 +29,16 @@
   </footer>
 </body>
 
-<template name="addEvent">
-  <div id="addEvent">
+<template name="instruction">
+  <div id="instruction">
     <h1>Event editing</h1>
+    {{#unless isGoogleUser}}
     <p>Add events by clicking and dragging on the calendar.<br>
       Delete events by clicking on an event.</p>
+    {{else}}
+    <p> Imported events cannot be edited and <br>
+      Only commitment events can be edited. </p>
+    {{/unless}}
   </div>
 </template>
 
