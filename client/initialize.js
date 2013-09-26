@@ -4,8 +4,8 @@ Meteor.subscribe("userData");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
 
-plotUpdate = function(){
-  var commitment = Commitments.findOne(Session.get("selected_commitment"));
+plotUpdate = function(CommitmentId){
+  var commitment = Commitments.findOne(CommitmentId);
   var prefs = commitment.prefs;
   var prefsKey = _.keys(prefs);
   var plotPrefs = [];
@@ -93,8 +93,11 @@ Meteor.startup(function () {
 
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
-      tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
-      plotUpdate();
+      if (event.commitmentId){
+        tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
+        Session.set("selected_commitment", event.commitmentId);   
+        plotUpdate(event.commitmentId);
+      }
       Events.remove(event._id);
       event.lastUpdated = moment().toDate();
       Events.insert(event);
@@ -106,7 +109,7 @@ Meteor.startup(function () {
     $('#calendar').fullCalendar(
       'refetchEvents'
     );
-  });
+  })
 });
 
 Template.copyright.yearOfProduction = function(){

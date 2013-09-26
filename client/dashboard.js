@@ -5,7 +5,7 @@ Template.dashboard.commitments = function () {
 Template.commitment.events({
   'click': function () {
     Session.set("selected_commitment", this._id);
-    plotUpdate();    
+    plotUpdate(Session.get("selected_commitment"));    
   }
 });
 
