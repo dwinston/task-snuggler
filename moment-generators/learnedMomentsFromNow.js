@@ -72,6 +72,7 @@ tsnug.learnedMomentsFromNow = function(commitment) {
     var tmp;
     return _.every(candidate.slice(0,cIdx), function (c) {
       tmp = rankedIndices[c];
+      // tsnug.contains is inclusive, hence the -1 in the line below
       allocatedInterval = [tmp, tmp + sessionIndexSpan - 1];      
       return !tsnug.contains(allocatedInterval, cTimeIndex);
     });

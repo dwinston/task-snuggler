@@ -64,18 +64,13 @@ var getCalendarsAndThen =  function(doThis) {
            doThis);
 };
 
-refreshGCalEvents = function() {
-  var pastImported = Events.find({
-    gCalEvent: true, 
-    lastUpdated: {$lt: moment().toDate()}
+var refreshGCalEvents = function() {
+  console.log('Removing previously imported events...');
+  Events.find({gCalEvent: true}).forEach(function (gCalEvent) {
+    Events.remove(gCalEvent._id);
   });
 
   getCalendarsAndThen(tryToFetchAndInsertEvents);
-
-  console.log('Removing previously imported events...');
-  pastImported.forEach(function (gCalEvent) {
-    Events.remove(gCalEvent._id);
-  });
 };
 
 Meteor.startup(function () {
