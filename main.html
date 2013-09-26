@@ -24,6 +24,9 @@
       </div>
     </div>
   </div>
+  <footer>
+    {{> copyright}}
+  </footer>
 </body>
 
 <template name="addEvent">
@@ -62,18 +65,8 @@
       {{> commitment}}
       {{/each}}
     </ul>
-    Event Generation Algorithm:
-    <select id="algorithmSelection" class="input-large">
-      <option value="safeRandomMomentFromNow" selected>
-        One at a time, random and non-conflicting, between now and end of week
-      </option>
-      <option value="randomMomentFromNow">
-        One at a time, random, between now and end of week
-      </option>
-      <option value="evenlyDistributedMomentsFromNow">
-        All at once, evenly distributed, between now and end of week
-      </option>
-    </select>
+    <div id="placeholder" style="width:500px;height:200px">
+    </div>
   </div>
 </template>
 
@@ -105,4 +98,11 @@
 <template name="calendar">
   <div id="calendar">
   </div>
+</template>
+
+<template name="copyright">
+  <center>
+    Copyright &copy; {{yearOfProduction}}
+    Donny & Cameron
+  </center>
 </template>

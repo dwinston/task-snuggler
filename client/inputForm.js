@@ -11,7 +11,8 @@ Template.inputForm.events({
         numSessions: numSessions,
         hoursPerSession: hoursPerSession,
         title: title,
-        eventIds: []
+        eventIds: [],
+        prefs: {}
       }, 
       function (err, commitmentId) {
         if (err) { 
