@@ -64,27 +64,31 @@ Meteor.startup(function () {
 
     // Events inserted if clicked on empty slots
     select: function(start, end, allDay) {
+      if(Meteor.user().services.google){
+        alert('Please go back to GCal to edit your one-off events');
+        return;
+      };
       var title = prompt('Event Title:');
       if (title) {
         Events.insert({
           userId: Meteor.userId(),
           commitmentId: 0,
-	        title: title,
-	        start: start,
-	        end: end,
-	        allDay: allDay
-	      });
+	  title: title,
+	  start: start,
+	  end: end,
+	  allDay: allDay,
+          gCalEvent: fasle
+	});
       }
-      calendar.fullCalendar('unselect');
     },
-
+    
     events: function(start, end, callback) {
       callback(Events.find().fetch());
     },
 
     // Delete event by clicking on it
     eventClick: function(event, jsEvent, view) {
-      if (!event.commitmentId){
+      if (!event.commitmentId && !event.gCalEvent){
         var deleteFlag = confirm
         ('Do you really want to delete the ' + event.title + ' event?');
         if (deleteFlag) Events.remove(event._id);

@@ -25,9 +25,8 @@ Meteor.startup(function () {
   }
   var cameronId = Meteor.users.findOne({username: "cameron"})._id;
   var donnyId = Meteor.users.findOne({username: "donny"})._id;
-
-  var defaultEventGenerationAlgorithm = "learnedMomentsFromNow";
   
+  // Event initialization
   if (Events.find().count() === 0) { 
     var now = moment().startOf('week');
     var d = now.date();
@@ -82,10 +81,14 @@ Meteor.startup(function () {
       Events.insert(_.extend(evt, {
         lastUpdated: moment().toDate(),
         commitmentId: 0,
-        allDay: false
+        allDay: false,
+        gCalEvent: false
       }));
     });
     
+    // Commitments initialization
+    var defaultEventGenerationAlgorithm = "learnedMomentsFromNow";
+
     if (Commitments.find().count() == 0) {
       Commitments.insert(
         {

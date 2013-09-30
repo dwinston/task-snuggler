@@ -14,7 +14,8 @@ var insertEvent = function (event) {
     end: new Date(event.end.dateTime), 
     commitmentId: 0, 
     allDay: false, 
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
+    editable: false
   });
 };
 
