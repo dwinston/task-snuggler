@@ -33,3 +33,5 @@ generateEvents = function (commitmentId, algorithm) {
     });
   }  
 };
+
+// UI handling

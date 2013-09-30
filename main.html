@@ -3,12 +3,36 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="row-fluid">
-      <div class="span12">
+  {{>header}}
+  {{>mainPage}}
+  {{> footer}}
+</body>
+
+<template name="header">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <div class="nav pull-left">
+          <p class="lead">Task Snuggler</p>
+        </div>
         <div id="signin-ui">{{loginButtons align="right"}}</div>
       </div>
     </div>
+  </div>
+</template>
+
+<template name="mainPage">
+  {{#unless alreadyLogin}}
+  {{welcomeText}}
+
+We met and decided to create Task Snuggler (tentative name), a quick way to auto-schedule personal, habitual commitments. <br><hr>
+
+We make commitments, like “jog every week”. It’s hard enough to solidify this commitment by deciding on a number of sessions and hours/session, like “jog 3 times a week, 1hr each time”. It’s even harder to then schedule and re-schedule these sessions, week after week, given other events that come up. The cognitive load from decisions about scheduling can hurt the willpower you need to turn your commitments into real habits (see e.g. http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat). <br><hr>
+
+Task Snuggler wants to help you stick to commitments. You specify a commitment with sessions/week and hours/session (both can change; that’s fine). Sessions get added to your calendar so as not to conflict with existing events. If you add events, your commitment sessions will adjust as necessary. If you miss sessions, your calendar will adjust if possible so that you can still do all sessions before the week ends. If you manually drag and drop sessions within your calendar to adjust their times, Task Snuggler listens, learning your preferences for session times so that as the weeks go on, the “edit distance” between our auto-scheduling and your adjustments should tend to zero. Your commitment sessions snuggle around the other (“fixed”-time) events in your life, you develop the habits you want, and life is good. <br><hr>
+
+  {{else}}
+  <div class="container">
     <div class="row-fluid">
       <div class="span6">
         <div class="span12">
@@ -24,10 +48,8 @@
       </div>
     </div>
   </div>
-  <footer>
-    {{> copyright}}
-  </footer>
-</body>
+  {{/unless}}
+</template>
 
 <template name="instruction">
   <div id="instruction">
@@ -76,28 +98,28 @@
 </template>
 
 <template name="commitment">
-    <li id={{_id}} class="commitment {{selected}}">
-      {{#unless selected}}
-        {{title}} for {{hoursPerSession}} hours, 
-        {{numSessions}} times/week.
-      {{else}}
-        <form id="editCommitment" class="form-inline">
-          <input type="text" class="input-mini" required="required"
-                 id="titleToEdit" value="{{title}}">
-          for       
-          <input type="number" min="0.5" step="0.5" required="required"
-                 id="hoursPerSessionToEdit" class="input-mini" 
-                 value="{{hoursPerSession}}">
-          hours, 
-          <input type="number" min="1" step="1" required="required"
-                 id="numSessionsToEdit" class="input-mini" 
-                 value="{{numSessions}}">
-          times/week.
-          <button type="submit" class="btn">Edit</button>
-          <button id="removeCommitment" class="btn">Remove</button>
-        </form>
-      {{/unless}}
-    </li>
+  <li id={{_id}} class="commitment {{selected}}">
+    {{#unless selected}}
+    {{title}} for {{hoursPerSession}} hours, 
+    {{numSessions}} times/week.
+    {{else}}
+    <form id="editCommitment" class="form-inline">
+      <input type="text" class="input-mini" required="required"
+             id="titleToEdit" value="{{title}}">
+      for       
+      <input type="number" min="0.5" step="0.5" required="required"
+             id="hoursPerSessionToEdit" class="input-mini" 
+             value="{{hoursPerSession}}">
+      hours, 
+      <input type="number" min="1" step="1" required="required"
+             id="numSessionsToEdit" class="input-mini" 
+             value="{{numSessions}}">
+      times/week.
+      <button type="submit" class="btn">Edit</button>
+      <button id="removeCommitment" class="btn">Remove</button>
+    </form>
+    {{/unless}}
+  </li>
 </template>
 
 <template name="calendar">
@@ -105,9 +127,13 @@
   </div>
 </template>
 
-<template name="copyright">
-  <center>
-    Copyright &copy; {{yearOfProduction}}
-    Donny & Cameron
-  </center>
+<template name="footer">
+  <footer>
+    <center>
+      Copyright &copy; {{yearOfProduction}}
+      Donny & Cameron
+      <br>
+      Produced with Meteor
+    </center>
+  </footer>
 </template>
