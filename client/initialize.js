@@ -123,6 +123,4 @@ Meteor.startup(function () {
   })   
 });
 
-Template.copyright.yearOfProduction = function(){
-  return moment().year();
-};
+
