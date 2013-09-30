@@ -110,14 +110,14 @@ Meteor.startup(function () {
   
   Deps.autorun(function () {
     Events.find();
-    $('#calendar').fullCalendar(
+    $('#calendar').fullCalendar( 
       'refetchEvents'
     );
   })
 
   Deps.autorun(function(){
     selectedCommitment = Session.get("selected_commitment")
-    if(selectedCommitment){
+    if(Meteor.user() && selectedCommitment){
       plotUpdate(selectedCommitment);
     }
   })   
