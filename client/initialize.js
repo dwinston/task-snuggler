@@ -6,14 +6,14 @@ Session.setDefault("scratchTime", 10); // seconds before new pref persists
 
 plotUpdate = function(CommitmentId){
   var commitment = Commitments.findOne(CommitmentId);
+  var plotPrefs = [];
   var prefs = commitment.prefs;
   var prefsKey = _.keys(prefs);
-  var plotPrefs = [];
   _.each(prefsKey, function(key){
     var tmpKey = moment().startOf('week').add('hour', key/2);
     var tmpValue = prefs[key];
     plotPrefs.push([tmpKey.toDate().getTime(), tmpValue]);
-  });
+  });  
   $.plot($("#placeholder"), [plotPrefs], 
          {
            xaxis:{
@@ -114,6 +114,13 @@ Meteor.startup(function () {
       'refetchEvents'
     );
   })
+
+  Deps.autorun(function(){
+    selectedCommitment = Session.get("selected_commitment")
+    if(selectedCommitment){
+      plotUpdate(selectedCommitment);
+    }
+  })   
 });
 
 Template.copyright.yearOfProduction = function(){
