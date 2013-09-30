@@ -3,6 +3,7 @@
 //////
 
 var googleCalendars = [];
+var gcalAPIprefix = "https://www.googleapis.com/calendar/v3";
 
 var insertEvent = function (event) {
   Events.insert({
@@ -17,18 +18,12 @@ var insertEvent = function (event) {
   });
 };
 
-var insertEvents = function(cIdx) {
-  return function (error, result) {
-    if (result.statusCode === 200) {
-      console.log('Fetched events from calendar '+ (cIdx+1) + ' of ' + 
-                  googleCalendars.length + '. Inserting...');
-      _.forEach(result.data.items, insertEvent);
-    }
-  };
+var insertCalendarEvents = function(error, result) {
+    if (result.statusCode === 200) _.forEach(result.data.items, insertEvent);
+    else console.log('return code not 200');
 };
 
-var fetchAndInsertEvents =  function (calendar, cIdx) {
-  var gcalAPIprefix = "https://www.googleapis.com/calendar/v3";
+var fetchSingleCalendarEvents =  function (calendar) {
   var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
   HTTP.get(
     gcalAPIprefix + "/calendars/"+calendar.id+"/events",
@@ -36,41 +31,39 @@ var fetchAndInsertEvents =  function (calendar, cIdx) {
      params: {
        singleEvents: true,
        orderBy: "startTime",
-       timeMin: moment().format("YYYY-MM-DDTHH:mm:ssZ"),
+       timeMin: moment().startOf('week').format("YYYY-MM-DDTHH:mm:ssZ"),
        timeMax: moment().endOf('week').format("YYYY-MM-DDTHH:mm:ssZ")
      }},
-    insertEvents(cIdx));
+    insertCalendarEvents);
 };
 
 // Visible to user in GCal UI, and not Weather
-var isSelected = function (c) {
+var calendarFilter = function (c) {
   return c.selected && (c.summary !== "Weather");
 };
 
-var tryToFetchAndInsertEvents = function (error, result) {
+var fetchAllCalendarEvents = function (error, result) {
   if (result.statusCode === 200) {
-    googleCalendars = _.filter(result.data.items, isSelected);
-    console.log('Found ' + googleCalendars.length + ' active calendars. ' + 
-                'Fetching events...');
-    _.forEach(googleCalendars, function (c,i) { fetchAndInsertEvents(c,i); });
+    googleCalendars = _.filter(result.data.items, calendarFilter);
+    _.forEach(googleCalendars, function (c) { 
+      fetchSingleCalendarEvents(c); 
+    });
   }
+  else console.log('return code not equal to 200');
 };
 
-var getCalendarsAndThen =  function(doThis) {
-  var gcalAPIprefix = "https://www.googleapis.com/calendar/v3";
+var getCalendarLists =  function() {
   var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
   HTTP.get(gcalAPIprefix + "/users/me/calendarList",
            {headers: {'Authorization': Auth}},
-           doThis);
+           fetchAllCalendarEvents);
 };
 
 var refreshGCalEvents = function() {
-  console.log('Removing previously imported events...');
   Events.find({gCalEvent: true}).forEach(function (gCalEvent) {
     Events.remove(gCalEvent._id);
   });
-
-  getCalendarsAndThen(tryToFetchAndInsertEvents);
+  getCalendarLists();
 };
 
 Meteor.startup(function () {
