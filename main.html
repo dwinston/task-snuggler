@@ -62,7 +62,7 @@
             <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
           </ul>
         </p>
-    </div>
+      </div>
     </div>
     <div id="loginPage" class="span4">
       <form class="form-horizontal">
@@ -108,10 +108,8 @@
       <div class="span12">
         {{> instruction}}
         {{> inputForm}}
-      </div>
-      <div class="span12">
         {{> dashboard}}
-      </div>
+        </div>
     </div>
     <div class="span6">
       {{> calendar}}
@@ -120,7 +118,7 @@
 </template>
 
 <template name="instruction">
-  <div id="instruction">
+  <div id="instruction" class="well">
     <h1>Event editing</h1>
     {{#unless isGoogleUser}}
     <p>Add events by clicking and dragging on the calendar.<br>
@@ -133,7 +131,7 @@
 </template>
 
 <template name="inputForm">
-  <div>
+  <div class="well">
     <h1>Add Commitment</h1>
     <form id="addCommitment" class="form-inline">
       I commit to 
@@ -152,7 +150,7 @@
 </template>
 
 <template name="dashboard">
-  <div id="dashboard">
+  <div id="dashboard" class="well">
     <h1>Dashboard</h1>
     Commitments:
     <ul id="commitments">
