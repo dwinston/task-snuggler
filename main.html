@@ -4,10 +4,8 @@
 
 <body>
   {{>header}}
-  <div class="container">
-    {{>mainPage}}
-    <div>
-      {{> footer}}
+  {{>mainPage}}
+  {{> footer}}
 </body>
 
 <template name="header">
@@ -24,40 +22,87 @@
 </template>
 
 <template name="mainPage">
-  {{#unless currentUser}}
-  <div class="hero-unit">
-    <h3>What is Task Snuggler?</h3>
-    <p>
-      We make commitments. 
-      Commitments can help you improve a certain skill through practice. 
-      It can also help you to live a healthier lifestyle. 
-      Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
-      A good example would be jogging twice a week, with each session lasting one hour. 
-      Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
-    </p>
-    <p>
-      Task Snuggler wants to help you stick to commitments. 
-      This is because 
-      <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
-      Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
-    </p>
-    <hr>
-    <h3>How does it work?</h3>
-    <p>
-      <ul>
-        <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
-          Sessions get added to your calendar so as not to conflict with existing events. </li>
-        <li>If you add events, your commitment sessions will adjust as necessary. </li>
-        <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
-        <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
-      </ul>
-      <div align="center"><b>Your commitment sessions snuggle around the other events in your life, <br>
-          you develop the habits you want, and <br>
-          LIFE IS GOOD!!
-      </div>
-    </p>
+  <div class="container">
+    {{#if currentUser}}
+    {{>userLoggedIn}}
+    {{else}}
+    {{>userNotLoggedIn}}
+    {{/if}}
   </div>
-  {{else}}               
+</template>
+
+<template name="userNotLoggedIn">
+  <div class="row-fluid">
+    <div id="welcomeText" class="span8">
+      <div class="well">
+        <h3>What is Task Snuggler?</h3>
+        <p>
+          We make commitments. 
+          Commitments can help you improve a certain skill through practice. 
+          It can also help you to live a healthier lifestyle. 
+          Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
+          A good example would be jogging twice a week, with each session lasting one hour. 
+          Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
+        </p>
+        <p>
+          Task Snuggler wants to help you stick to commitments. 
+          This is because 
+          <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
+          Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
+        </p>
+        <hr>
+        <h3>How does it work?</h3>
+        <p>
+          <ul>
+            <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
+              Sessions get added to your calendar so as not to conflict with existing events. </li>
+            <li>If you add events, your commitment sessions will adjust as necessary. </li>
+            <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
+            <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
+            <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
+          </ul>
+        </p>
+    </div>
+    </div>
+    <div id="loginPage" class="span4">
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label" for="userName">User Name</label>
+          <div class="controls">
+            <input type="text" id="userName" placeholder="User Name">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">Password</label>
+          <div class="controls">
+            <input type="password" id="inputPassword" placeholder="Password">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">Sign in</button>
+            <hr>
+            <button type="submit" class="btn">Create Account</button>
+          </div>
+          <div class="controls">
+            <div align="center"><hr>OR<hr></div>
+            <button type="submit" class="btn">Sign in with Google</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  
+    <div align="center">
+      <hr>
+      <p><b>Your commitment sessions snuggle around the other events in your life, <br>
+          you develop the habits you want, and <br>
+          LIFE IS GOOD!!</p>
+    </div>
+</template>
+
+<template name="userLoggedIn">
   <div class="row-fluid">
     <div class="span6">
       <div class="span12">
@@ -72,7 +117,6 @@
       {{> calendar}}
     </div>
   </div>
-  {{/unless}}
 </template>
 
 <template name="instruction">
