@@ -208,6 +208,18 @@
 </template>
 
 <template name="calendar">
+  <div align="center">
+    <button type="button" class="btn btn-default btn-lg" id="previousWeekBtn">
+      <i class="icon-arrow-left"></i>
+    </button>
+    <button type="button" class="btn btn-default btn-lg" id="nextWeekBtn">
+      <i class="icon-arrow-right"></i>
+    </button>
+    {{currentViewWeek}}
+    <button type="button" class="btn btn-default btn-lg" id="todayBtn">
+     Today 
+    </button>    
+  </div>
   <div id="calendar">
   </div>
 </template>

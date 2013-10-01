@@ -26,14 +26,17 @@ var insertCalendarEvents = function(error, result) {
 
 var fetchSingleCalendarEvents =  function (calendar) {
   var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
+  var cView = $('#calendar').fullCalendar('getView');
+  var startOfWeek = moment(cView.start).startOf('week');
+  var endOfWeek = moment(startOfWeek).endOf('week');
   HTTP.get(
     gcalAPIprefix + "/calendars/"+calendar.id+"/events",
     {headers: {'Authorization': Auth},
      params: {
        singleEvents: true,
        orderBy: "startTime",
-       timeMin: moment().startOf('week').format("YYYY-MM-DDTHH:mm:ssZ"),
-       timeMax: moment().endOf('week').format("YYYY-MM-DDTHH:mm:ssZ")
+       timeMin: startOfWeek.format("YYYY-MM-DDTHH:mm:ssZ"),
+       timeMax: endOfWeek.endOf('week').format("YYYY-MM-DDTHH:mm:ssZ")
      }},
     insertCalendarEvents);
 };

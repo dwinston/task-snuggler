@@ -46,9 +46,12 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 startFullCalendar = function(){
   $('#calendar').fullCalendar({
     header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      left:' ',
+      center: ' ',
+      right: ' '
+      //left: 'prev,next today',
+      //center: 'title',
+      //right: 'month,agendaWeek,agendaDay'
     },
     defaultView: 'agendaWeek',
     selectable: true,
@@ -127,7 +130,6 @@ Meteor.startup(function () {
     if(Meteor.user() && selectedCommitment){
       plotUpdate(selectedCommitment);
     }
-  })   
-});
-
+  }) 
+})
 
