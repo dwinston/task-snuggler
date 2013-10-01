@@ -60,19 +60,9 @@ var getCalendarLists =  function() {
            fetchAllCalendarEvents);
 };
 
-var refreshGCalEvents = function() {
+refreshGCalEvents = function() {
   Events.find({gCalEvent: true}).forEach(function (gCalEvent) {
     Events.remove(gCalEvent._id);
   });
   getCalendarLists();
 };
-
-Meteor.startup(function () {
-  Deps.autorun(function (c) {
-    var user = Meteor.user();
-    if (user && user.services && user.services.google) {
-      c.stop(); // otherwise, runs twice in rapid succession, doubling events
-      refreshGCalEvents();
-    }
-  });
-});

@@ -3,6 +3,9 @@ Meteor.subscribe("commitments");
 Meteor.subscribe("userData");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
+Session.setDefault("loginStatus", "signIn"); 
+// Three statues
+// signIn, createAccountReady, createAccountNow, loggedIn
 
 plotUpdate = function(CommitmentId){
   var commitment = Commitments.findOne(CommitmentId);
@@ -41,7 +44,6 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
 };
 
 startFullCalendar = function(){
-
   $('#calendar').fullCalendar({
     header: {
       left: 'prev,next today',
@@ -117,9 +119,9 @@ Meteor.startup(function () {
     },
     passwordSignupFields: 'USERNAME_ONLY'
   });
-
-  startFullCalendar();
-
+  
+  Session.set("loginStatus", "signIn");
+  
   Deps.autorun(function(){
     selectedCommitment = Session.get("selected_commitment")
     if(Meteor.user() && selectedCommitment){

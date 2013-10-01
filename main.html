@@ -15,7 +15,9 @@
         <div class="nav pull-left">
           <p class="lead">Task Snuggler</p>
         </div>
+        {{#if currentUser}}
         <div id="signin-ui">{{loginButtons align="right"}}</div>
+        {{/if}}
       </div>
     </div>
   </div>
@@ -66,11 +68,11 @@
     </div>
   </div>
   {{> loginPage}}
-  <div id="webSlogan" class="span12">
+  <div id="webSlogan" class="span12"> 
     <p><hr>
-        Your commitment sessions snuggle around the other events in your life, <br>
-        you develop the habits you want, and <br>
-        LIFE IS GOOD!!
+      Your commitment sessions snuggle around the other events in your life, <br>
+      you develop the habits you want, and <br>
+      LIFE IS GOOD!!
     </p>
   </div>
 </template>
@@ -90,15 +92,31 @@
           <input type="password" id="inputPassword" placeholder="Password">
         </div>
       </div>
+      {{#if createAccount}}
+      <div class="control-group">
+        <label class="control-label" for="confirmPassword">Password (again)</label>
+        <div class="controls">
+          <input type="password" id="confirmPassword" placeholder="Password">
+        </div>
+      </div>
       <div class="control-group">
         <div class="controls">
-          <button type="submit" class="btn">Sign in</button>
-          <hr>
           <button type="submit" class="btn">Create Account</button>
+          <hr>
+          <button class="btn" id="signInBtn">Sign in</button>
         </div>
+        {{else}}      
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">Sign in</button>
+            <hr>
+            <button class="btn" id="createAccountBtn">Create Account</button>
+          </div>
+        </div>
+        {{/if}}
         <div class="controls">
           <div align="center"><hr>OR<hr></div>
-          <button type="submit" class="btn">Sign in with Google</button>
+          <button id="buttonGoogle" class="btn">Sign in with Google</button>
         </div>
       </div>
     </form>
@@ -197,10 +215,10 @@
 <template name="footer">
   <div align="center">
     <hr>
-      Copyright &copy; {{yearOfProduction}}
-      Donny & Cameron
-      <br>
-      Produced with Meteor
+    Copyright &copy; {{yearOfProduction}}
+    Donny & Cameron
+    <br>
+    Produced with Meteor
     <hr>
   </div>
 </template>
