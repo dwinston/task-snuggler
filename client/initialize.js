@@ -40,15 +40,8 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
     .toDate();
 };
 
-Meteor.startup(function () {
-  Accounts.ui.config({
-    requestPermissions: {
-      google: ['openid','email',
-               'https://www.googleapis.com/auth/calendar.readonly']
-    },
-    passwordSignupFields: 'USERNAME_ONLY'
-  });
-  
+startFullCalendar = function(){
+
   $('#calendar').fullCalendar({
     header: {
       left: 'prev,next today',
@@ -114,6 +107,18 @@ Meteor.startup(function () {
       'refetchEvents'
     );
   })
+}
+
+Meteor.startup(function () {
+  Accounts.ui.config({
+    requestPermissions: {
+      google: ['openid','email',
+               'https://www.googleapis.com/auth/calendar.readonly']
+    },
+    passwordSignupFields: 'USERNAME_ONLY'
+  });
+
+  startFullCalendar();
 
   Deps.autorun(function(){
     selectedCommitment = Session.get("selected_commitment")
