@@ -70,7 +70,7 @@ startFullCalendar = function(){
 	  start: start,
 	  end: end,
 	  allDay: allDay,
-          gCalEvent: fasle
+          gCalEvent: false
 	});
       }
     },
