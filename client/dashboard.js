@@ -21,6 +21,7 @@ Template.dashboard.events({
       Events.remove(id);
     });
     Commitments.remove(commitment._id);
+    $('#placeholder').html('');
   },
   "submit #editCommitment": function (evt, templ) {
     evt.preventDefault();
