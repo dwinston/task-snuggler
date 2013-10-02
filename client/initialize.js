@@ -4,8 +4,8 @@ Meteor.subscribe("userData");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
 Session.setDefault("loginStatus", "signIn"); 
-// Three statues
-// signIn, createAccountReady, createAccountNow, loggedIn
+// Three statuses
+// signIn, createAccountReady, loggedIn
 
 plotUpdate = function(CommitmentId){
   var commitment = Commitments.findOne(CommitmentId);
@@ -59,7 +59,8 @@ startFullCalendar = function(){
     editable: true,
     contentHeight: 600,
     firstHour: 9,
-
+    eventColor: 'black',
+ 
     // Events inserted if clicked on empty slots
     select: function(start, end, allDay) {
       if(Meteor.user().services.google){
@@ -75,7 +76,7 @@ startFullCalendar = function(){
 	  start: start,
 	  end: end,
 	  allDay: allDay,
-          gCalEvent: false
+          gCalEvent: false,
 	});
       }
     },
