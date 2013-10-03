@@ -116,6 +116,7 @@ startFullCalendar = function(){
 }
 
 Meteor.startup(function () {
+  // Deprecated
   Accounts.ui.config({
     requestPermissions: {
       google: ['openid','email',

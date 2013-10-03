@@ -41,6 +41,20 @@ var fetchSingleCalendarEvents =  function (calendar) {
     insertCalendarEvents);
 };
 
+// prototype. need to improve / connect to other code
+var insertEventIntoGCal = function(calendar, event) {
+  var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
+  HTTP.post(
+    gcalAPIprefix + "/calendars/"+calendar.id+"/events",
+    {headers: {'Authorization': Auth},
+     data: {
+       summary: event.title,
+       start: {dateTime: moment(event.start).format("YYYY-MM-DDTHH:mm:ssZ")},
+       end: {dateTime: moment(event.end).format("YYYY-MM-DDTHH:mm:ssZ")}
+     }},
+    function () {});
+};
+
 // Visible to user in GCal UI, and not Weather
 var calendarFilter = function (c) {
   return c.selected && (c.summary !== "Weather");

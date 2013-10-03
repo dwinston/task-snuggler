@@ -4,7 +4,7 @@ Template.loginPage.events({
     Meteor.loginWithGoogle(
       {
         requestPermissions:
-        ['openid','email','https://www.googleapis.com/auth/calendar.readonly']
+        ['openid','email','https://www.googleapis.com/auth/calendar']
       }, errorCallBack);  
   },
   "submit #loginPage": function (evt, templ) {
