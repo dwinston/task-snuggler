@@ -34,7 +34,9 @@ generateEvents = function (commitmentId, algorithm) {
     _.each(startsAts, function (startsAt) {
       insertCommitmentEvent(commitment, startsAt);
     });
-  }  
+  }
+  var user = Meteor.user();
+  if (user && user.services && user.services.google){
+    updateGCalCommitments();
+  }
 };
-
-// UI handling

@@ -17,7 +17,7 @@ plotUpdate = function(CommitmentId){
     var tmpValue = prefs[key];
     plotPrefs.push([tmpKey.toDate().getTime(), tmpValue]);
   });  
-  $.plot($("#placeholder"), [plotPrefs], 
+  $.plot($("#placeholder"), [plotPrefs],
          {
            xaxis:{
              mode: "time",
@@ -60,7 +60,7 @@ startFullCalendar = function(){
     contentHeight: 600,
     firstHour: 9,
     eventColor: 'black',
- 
+    
     // Events inserted if clicked on empty slots
     select: function(start, end, allDay) {
       if(Meteor.user().services.google){
@@ -100,6 +100,11 @@ startFullCalendar = function(){
         tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
         Session.set("selected_commitment", event.commitmentId);   
         plotUpdate(event.commitmentId);
+        
+        var user = Meteor.user();
+        if (user && user.services && user.services.google){
+          updateGCalCommitments();
+        }
       }
       Events.remove(event._id);
       event.lastUpdated = moment().toDate();
