@@ -18,6 +18,14 @@ updateGCalCommitments = function(){
   getCalendarLists(checkBeforeUpdate);
 };
 
+// Delete all old events and the calendar from GCal
+deleteCalendarFromGCal = function(commitment){
+  var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
+  HTTP.del(
+    gcalAPIprefix + "/calendars/"+commitment.gCalId,
+    {headers: {'Authorization': Auth}},function(){});    
+};
+
 // Insert GCal event in to local database
 var insertEvent = function (event) {
   Events.insert({
@@ -137,10 +145,3 @@ var checkBeforeUpdate = function(error, result){
   else console.log('return code not equal to 200');
 }
 
-// Clear all the old events and then re-insert them
-var deleteCalendarFromGCal = function(commitment){
-  var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
-  HTTP.del(
-    gcalAPIprefix + "/calendars/"+commitment.gCalId,
-    {headers: {'Authorization': Auth}},function(){});    
-};

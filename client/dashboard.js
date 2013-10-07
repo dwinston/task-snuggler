@@ -20,8 +20,12 @@ Template.dashboard.events({
     _.each(commitment.eventIds, function(id){
       Events.remove(id);
     });
-    Commitments.remove(commitment._id);
     $('#placeholder').html('');
+    var user = Meteor.user();
+    if (user && user.services && user.services.google){
+      deleteCalendarFromGCal(commitment);
+    }
+    Commitments.remove(commitment._id);
   },
   "submit #editCommitment": function (evt, templ) {
     evt.preventDefault();
