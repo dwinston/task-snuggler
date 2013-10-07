@@ -185,9 +185,18 @@
 <template name="commitment">
   <li id={{_id}} class="commitment {{selected}}">
     {{#unless selected}}
+    <form id="checkbox {{_id}}" class="form-inline">
     {{title}} for {{hoursPerSession}} hours, 
     {{numSessions}} times/week.
-    {{else}}
+      <input type="checkbox">
+      {{#each commitmentEvents}}
+      {{> commitmentCheckBox}}
+      {{/each}}
+    <button type="submit" class="btn">
+      <i class="icon-refresh"></i>
+    </button>
+    </form>
+    {{else}}    
     <form id="editCommitment" class="form-inline">
       <input type="text" class="input-mini" required="required"
              id="titleToEdit" value="{{title}}">
@@ -205,6 +214,10 @@
     </form>
     {{/unless}}
   </li>
+</template>
+
+<template name="commitmentCheckBox">
+  <input type="checkbox">
 </template>
 
 <template name="calendar">

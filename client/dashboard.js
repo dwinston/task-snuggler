@@ -1,16 +1,6 @@
+// Template dashboard
 Template.dashboard.commitments = function () {
   return Commitments.find({}, {sort: {title: -1}});
-};
-
-Template.commitment.events({
-  'click': function () {
-    Session.set("selected_commitment", this._id);
-    plotUpdate(Session.get("selected_commitment"));    
-  }
-});
-
-Template.commitment.selected = function () {
-  return Session.equals("selected_commitment", this._id) ? "selected" : '';
 };
 
 Template.dashboard.events({
@@ -50,5 +40,21 @@ Template.dashboard.events({
         }
       }
     );
+  }
+});
+
+// Template: commitment
+Template.commitment.commitmentEvents = function () {
+  return Events.find({commitmentId: this._id});
+};
+
+Template.commitment.selected = function () {
+  return Session.equals("selected_commitment", this._id) ? "selected" : '';
+};
+
+Template.commitment.events({
+  'dblclick': function () {
+    Session.set("selected_commitment", this._id);
+    plotUpdate(Session.get("selected_commitment"));    
   }
 });
