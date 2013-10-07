@@ -26,6 +26,7 @@ Template.dashboard.events({
       deleteCalendarFromGCal(commitment);
     }
     Commitments.remove(commitment._id);
+    Session.set("selected_commitment", ""); // Avoid error with deps.autorun
   },
   "submit #editCommitment": function (evt, templ) {
     evt.preventDefault();
