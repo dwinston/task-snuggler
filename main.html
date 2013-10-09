@@ -138,7 +138,7 @@
 
 <template name="instruction">
   <div id="instruction" class="well">
-    <h1>Event editing</h1>
+    <h1>Event editing <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
     {{#unless isGoogleUser}}
     <p>Add events by clicking and dragging on the calendar.<br>
       Delete events by clicking on an event.</p>
@@ -151,7 +151,7 @@
 
 <template name="inputForm">
   <div class="well">
-    <h1>Add Commitment</h1>
+    <h1>Add Commitment <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
     <form id="addCommitment" class="form-inline">
       I commit to 
       <input type="text" class="input-mini" required="required"
@@ -170,7 +170,7 @@
 
 <template name="dashboard">
   <div id="dashboard" class="well">
-    <h1>Dashboard</h1>
+    <h1>Dashboard <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
     Commitments:
     <ul id="commitments">
       {{#each commitments}}
