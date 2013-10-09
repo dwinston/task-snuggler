@@ -1,8 +1,8 @@
-tsnug.learnedMomentsFromNow = function(commitment) {
+tsnug.learnedMomentsFromNow = function(commitment, numPastEvent) {
 
   var hoursPerSession = commitment.hoursPerSession;
   var sessionIndexSpan = hoursPerSession * 2;
-  var numSessions = commitment.numSessions;
+  var numSessions = commitment.numSessions - numPastEvent;
   
   // obtain intervals of safe starts
   var intervals = tsnug.safeStarts(commitment.userId, hoursPerSession);

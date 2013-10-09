@@ -98,8 +98,6 @@ startFullCalendar = function(){
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
       if (event.commitmentId){
         tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
-        Session.set("selected_commitment", event.commitmentId);   
-        plotUpdate(event.commitmentId);
         
         var user = Meteor.user();
         if (user && user.services && user.services.google){
