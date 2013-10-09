@@ -22,6 +22,7 @@ var insertCommitmentEvent = function (commitment, startsAt) {
 generateEvents = function (commitmentId, algorithm, numPastEvent) {
   var commitment = Commitments.findOne(commitmentId);
   var fn = tsnug[algorithm];
+  numPastEvent = numPastEvent || 0;
   var startsAts = fn(commitment, numPastEvent);
   if (_.isEmpty(startsAts)) {
     if (Meteor.isClient) {
@@ -35,7 +36,7 @@ generateEvents = function (commitmentId, algorithm, numPastEvent) {
       insertCommitmentEvent(commitment, startsAt);
     });
   }
-  var user = Meteor.user();
+  var user = Meteor.users.findOne(commitment.userId);
   if (user && user.services && user.services.google){
     updateGCalCommitments();
   }
