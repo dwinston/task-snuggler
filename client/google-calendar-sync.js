@@ -83,6 +83,7 @@ var fetchAllCalendarEvents = function (error, result) {
 };
 
 var getCalendarLists =  function(callBackFunc) {
+  // TODO: Memoize when appropriate
   var Auth = 'Bearer ' + Meteor.user().services.google.accessToken;
   HTTP.get(gcalAPIprefix + "/users/me/calendarList",
            {headers: {'Authorization': Auth}},
