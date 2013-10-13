@@ -1,5 +1,6 @@
 authHeader = null;
 gCalAPIprefix =  "https://www.googleapis.com/calendar/v3";
+gCalFunc = {};
 
 GCalSync = {
   // Input: a Meteor.user().services.google object that has
@@ -17,4 +18,10 @@ GCalSync = {
   //   its property that enumerates its event ids (default 'eventIds') and
   //   the name of the foreign key in events that refers to its calendar
   //   ('commitmentId' in Task Snuggler).
+  edit: function(){
+    var args = new Array();
+    for (var i = 1; i < arguments.length; i++)
+      args.push(arguments[i]);
+    gCalFunc[func].apply(this, args);
+  }
 };

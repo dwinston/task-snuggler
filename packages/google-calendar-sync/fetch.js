@@ -1,20 +1,20 @@
 calendarList = [];
-getCalendarList = getEvents = function () {};
+gCalFunc.getCalendarList = gCalFunc.getEvents = function () {};
 
 
 Deps.autorun(function () {
   if (Session.get('GCalSync.authorized')) {
-    getCalendarList();
+    gCalFunc.getCalendarList();
   }
 });
 
 Deps.autorun(function () {
   if (Session.get('GCalSync.hasCalendarList')) {
-    getEvents();
+    gCalFunc.getEvents();
   }
 });
 
-getCalendarList = function () {
+gCalFunc.getCalendarList = function () {
   HTTP.get(
     gCalAPIprefix + "/users/me/calendarList",
     authHeader,
@@ -28,7 +28,7 @@ getCalendarList = function () {
     });
 };
 
-getEvents = function (calendar) {
+gCalFunc.getEvents = function (calendar) {
   if (arguments.length === 0) {
     _.forEach(calendarList, function (c) { getEvents(c); });
   }
