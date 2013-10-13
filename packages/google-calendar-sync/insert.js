@@ -1,8 +1,8 @@
-var insertEvent = function(event, calendarId){
+insertEvent = function(event, calendarId){
   HTTP.post(
     gcalAPIprefix + "/calendars/"+calendarId+"/events",
     {
-      headers: {'Authorization': Auth},
+      headers: authHeader,
       data: {
         summary: event.title,
         start: {dateTime: moment(event.start).format("YYYY-MM-DDTHH:mm:ssZ")},
@@ -13,12 +13,12 @@ var insertEvent = function(event, calendarId){
 });
 }
 
-var insertCalendar = function(title){
+insertCalendar = function(calendarTitle){
   HTTP.post(
     gcalAPIprefix + "/calendars",
     {
-      headers: {'Authorization': Auth},
-      data: {summary: title}
+      headers: authHeader,
+      data: {summary: calendarTitle}
     },
     insertCallBack);
 }

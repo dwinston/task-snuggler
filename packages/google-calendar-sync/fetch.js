@@ -1,4 +1,3 @@
-URLPrefix = "https://www.googleapis.com/calendar/v3";
 calendarList = [];
 getCalendarList = getEvents = function () {};
 
@@ -17,7 +16,7 @@ Deps.autorun(function () {
 
 getCalendarList = function () {
   HTTP.get(
-    URLPrefix + "/users/me/calendarList",
+    gCalAPIprefix + "/users/me/calendarList",
     authHeader,
     function (error, result) {
       if (result.statusCode === 200) {
