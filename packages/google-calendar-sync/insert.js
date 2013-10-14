@@ -1,4 +1,4 @@
-gCalFunc.insertEvent = function(event, calendarId){
+insertEvent = function(event, calendarId){
   HTTP.post(
     gcalAPIprefix + "/calendars/"+calendarId+"/events",
     {
@@ -13,7 +13,7 @@ gCalFunc.insertEvent = function(event, calendarId){
 });
 }
 
-gCalFunc.insertCalendar = function(calendarTitle){
+insertCalendar = function(calendarTitle){
   HTTP.post(
     gcalAPIprefix + "/calendars",
     {

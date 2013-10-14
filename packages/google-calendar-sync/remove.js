@@ -1,4 +1,4 @@
-gCalFunc.removeCalendar = function(calendarId){
+removeCalendar = function(calendarId){
   HTTP.del(
     gcalAPIprefix + "/calendars/"+calendarId,
     headers: authHeader,
@@ -6,7 +6,7 @@ gCalFunc.removeCalendar = function(calendarId){
   );
 }
 
-gCalFunc.removeEvent = function (eventId, calendarId){
+removeEvent = function (eventId, calendarId){
   HTTP.del(
     gcalAPIprefix + "/calendars/"+calendarId+"/events/"+eventId,
     headers: authHeader,

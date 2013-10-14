@@ -1,4 +1,4 @@
-gCalFunc.updateEvent = function (calendarId, event){
+updateEvent = function (calendarId, event){
   HTTP.put(
     gcalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
     {
@@ -13,7 +13,7 @@ gCalFunc.updateEvent = function (calendarId, event){
   );
 }
 
-gCalFunc.updateCalendar = function(calendar){
+updateCalendar = function(calendar){
   HTTP.put(
     gcalAPIprefix + "/calendars/" + calendarId,
     {
