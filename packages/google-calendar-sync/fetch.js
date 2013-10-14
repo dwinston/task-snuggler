@@ -17,7 +17,7 @@ Deps.autorun(function () {
 getCalendarList = function () {
   HTTP.get(
     gCalAPIprefix + "/users/me/calendarList",
-    authHeader,
+    {headers: authHeader},
     function (error, result) {
       if (result.statusCode === 200) {
         calendarList = _.filter(result.data.items, function (c) {
