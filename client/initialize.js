@@ -101,7 +101,7 @@ startFullCalendar = function(){
         
         var user = Meteor.user();
         if (user && user.services && user.services.google){
-          updateGCalCommitments();
+          //updateGCalCommitments();
         }
       }
       Events.remove(event._id);

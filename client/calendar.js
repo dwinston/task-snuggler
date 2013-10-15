@@ -2,7 +2,10 @@ Template.calendar.rendered = function(){
   var user = Meteor.user();
   if (user) startFullCalendar();
   if (user && user.services && user.services.google){
-    refreshGCalEvents();
+    //refreshGCalEvents();
+    GCalSync.setEvents(Events);
+    GCalSync.setCalendars(Commitments, {eventForeignKey: "commitmentId"});
+    GCalSync.setAuth(Meteor.user().services.google);
   }
 }
 
@@ -31,6 +34,6 @@ Template.calendar.events({
 var refetchEvents = function(){
   var user = Meteor.user();
   if (user && user.services && user.services.google){
-    refreshGCalEvents();
+    //refreshGCalEvents();
   }
 }

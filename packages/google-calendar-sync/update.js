@@ -11,7 +11,7 @@ updateEvent = function (calendarId, event){
     },
     updateCallBack
   );
-}
+};
 
 updateCalendar = function(calendar){
   HTTP.put(
@@ -24,8 +24,8 @@ updateCalendar = function(calendar){
     },
     updateCallBack
   );
-}
+};
 
 var updateCallBack = function (error, result){
   if (result.statusCode != 200) console.log('return code not 200');
-}
+};

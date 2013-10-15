@@ -38,6 +38,6 @@ generateEvents = function (commitmentId, algorithm, numPastEvent) {
   }
   var user = Meteor.users.findOne(commitment.userId);
   if (user && user.services && user.services.google){
-    updateGCalCommitments();
+    //updateGCalCommitments();
   }
 };

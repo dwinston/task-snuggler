@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use(['deps', 'session'], 'client');
+  api.use(['underscore', 'deps', 'session'], 'client');
 
   // Files are added in order, so e.g. package-scope variables
   // declared in initialize.js are available in subsequently

@@ -13,7 +13,7 @@ Template.dashboard.events({
     $('#placeholder').html('');
     var user = Meteor.user();
     if (user && user.services && user.services.google){
-      deleteCalendarFromGCal(commitment);
+      //deleteCalendarFromGCal(commitment);
     }
     Commitments.remove(commitment._id);
     Session.set("selected_commitment", ""); // Avoid error with deps.autorun

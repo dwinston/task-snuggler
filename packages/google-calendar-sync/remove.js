@@ -4,7 +4,7 @@ removeCalendar = function(calendarId){
     {headers: authHeader},
     removeCallBack
   );
-}
+};
 
 removeEvent = function (eventId, calendarId){
   HTTP.del(
@@ -12,8 +12,8 @@ removeEvent = function (eventId, calendarId){
     {headers: authHeader},
     removeCallBack
   );
-}
+};
 
 var removeCallBack = function(error, result){
   if (result.statusCode != 200) console.log('return code not 200');
-}
+};

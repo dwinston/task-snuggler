@@ -1,6 +1,5 @@
 Template.instruction.isGoogleUser = function(){
-  if (Meteor.user()){
-    if (Meteor.user().services.google) return true;
-  }
-  return false;
+  return Meteor.user() && 
+    Meteor.user().services && 
+    Meteor.user().services.google;
 }

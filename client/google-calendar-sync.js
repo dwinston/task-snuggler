@@ -134,8 +134,8 @@ var insertCalendarIntoGCal = function(commitment) {
 // Possible call back function for getCalendarLists
 var checkBeforeUpdate = function(error, result){
   if (result.statusCode === 200) {
-    var comCursor = Commitments.find({userId: Meteor.userId()});
-    comCursor.forEach(function (commitment){
+    // client subscription to commitments is limited to current user
+    Commitments.find().forEach(function (commitment){
       // Check if commitment already exist
       if (_.has(commitment, 'gCalId')) {
         deleteCalendarFromGCal(commitment);        
