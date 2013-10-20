@@ -3,6 +3,13 @@ gCalAPIprefix =  "https://www.googleapis.com/calendar/v3";
 appEvents = (typeof Events === "undefined") ? null : Events;
 appCalendars = (typeof Calendars == "undefined") ? null : Calendars;
 
+// Collections for holding GCal database on client side
+// Collections are not connected to server
+// Q: when does the local databse get deleted? 
+// Will this lead to security problems?
+GCalEvents = new Meteor.Collection(null, {connection: null});
+GCalCalendars = new Meteor.Collection(null, {connection: null});
+
 // Options for specifying the relationship between the application's
 // event and calendar collections.
 appCalendarHasMany = "eventIds";
@@ -30,5 +37,41 @@ GCalSync = {
     appCalendarHasMany = options.eventIds || "eventIds";
     appEventHasOne = options.eventForeignKey || "calendarId";
     appCalendars = meteorCollection;
+  },
+  
+  //insert: function(doc){},
+  //remove: function(doc){},
+  //fetch: function(){},
+  // for testing
+  display: function(){
+    console.log("display");
+    calendarCursor = GCalCalendars.find({});
+    calendarCursor.forEach(function (c) { console.log(c.title) });
+    eventCursor = GCalEvents.find({});
+    eventCursor.forEach(function (c) { console.log(c.title) });
   }
 };
+
+GCalEvents.observeChanges({
+  added: function (id, fields) {
+    
+  },
+  changed: function (id, fields){
+    
+  },
+  removed: function (id) {
+    
+  }
+});
+
+GCalCalendars.observeChanges({
+  added: function (id, fields) {
+    
+  },
+  changed: function (id, fields){
+    
+  },
+  removed: function (id) {
+    
+  }
+});
