@@ -1,4 +1,4 @@
-removeCalendar = function(calendarId){
+/*removeCalendar = function(calendarId){
   HTTP.del(
     gcalAPIprefix + "/calendars/"+calendarId,
     {headers: authHeader},
@@ -17,3 +17,4 @@ removeEvent = function (eventId, calendarId){
 var removeCallBack = function(error, result){
   if (result.statusCode != 200) console.log('return code not 200');
 };
+*/

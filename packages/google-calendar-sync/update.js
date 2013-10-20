@@ -1,3 +1,4 @@
+/*
 updateEvent = function (calendarId, event){
   HTTP.put(
     gcalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
@@ -29,3 +30,4 @@ updateCalendar = function(calendar){
 var updateCallBack = function (error, result){
   if (result.statusCode != 200) console.log('return code not 200');
 };
+*/

@@ -1,3 +1,4 @@
+/*
 Deps.autorun(function () {
   appCalendars && appCalendars.find().observeChanges({
     added: function (id, calendar) {
@@ -25,6 +26,7 @@ Deps.autorun(function () {
     }
   });
 });
+
 
 insertEvent = function(event, calendarId){
   HTTP.post(
@@ -58,3 +60,4 @@ insertCalendar = function(appId, calendar){
 var insertCallBack = function(error, result){
   if (result.statusCode != 200) console.log('GCalSync: insert failed');
 };
+*/
