@@ -1,4 +1,14 @@
 Meteor.startup(function () {
+  // first, remove configuration entry in case service is already configured
+  Accounts.loginServiceConfiguration.remove({
+    service: "google"
+  });
+  Accounts.loginServiceConfiguration.insert({
+    service: "google",
+    clientId: "49998162042.apps.googleusercontent.com",
+    secret: "mqQn-Ej6GJAxEIoSnOBAzLqh"
+  });
+  
   // These will be nuked upon 'meteor reset'.
   // To reset e.g. events and commitments,
   // do 'meteor mongo' and then
@@ -15,9 +25,8 @@ Meteor.startup(function () {
   }
   var cameronId = Meteor.users.findOne({username: "cameron"})._id;
   var donnyId = Meteor.users.findOne({username: "donny"})._id;
-
-  var defaultEventGenerationAlgorithm = "learnedMomentsFromNow";
   
+  // Event initialization
   if (Events.find().count() === 0) { 
     var now = moment().startOf('week');
     var d = now.date();
@@ -72,10 +81,14 @@ Meteor.startup(function () {
       Events.insert(_.extend(evt, {
         lastUpdated: moment().toDate(),
         commitmentId: 0,
-        allDay: false
+        allDay: false,
+        gCalEvent: false
       }));
     });
     
+    // Commitments initialization
+    var defaultEventGenerationAlgorithm = "learnedMomentsFromNow";
+
     if (Commitments.find().count() == 0) {
       Commitments.insert(
         {
@@ -84,7 +97,8 @@ Meteor.startup(function () {
           hoursPerSession: 1,
           title: "Jog",
           eventIds: [],
-          prefs: {}
+          prefs: {},
+          color: 'red'
         }, 
         function (err, res) {
           generateEvents(res, defaultEventGenerationAlgorithm);
@@ -97,7 +111,8 @@ Meteor.startup(function () {
           hoursPerSession: 1,
           title: "Code",
           eventIds: [],
-          prefs: {}
+          prefs: {},
+          color: 'red'
         }, 
         function (err, res) {
           generateEvents(res, defaultEventGenerationAlgorithm);

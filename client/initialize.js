@@ -1,19 +1,23 @@
 Meteor.subscribe("events");
 Meteor.subscribe("commitments");
+Meteor.subscribe("userData");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
+Session.setDefault("loginStatus", "signIn"); 
+// Three statuses
+// signIn, createAccountReady, loggedIn
 
-plotUpdate = function(){
-  var commitment = Commitments.findOne(Session.get("selected_commitment"));
+plotUpdate = function(CommitmentId){
+  var commitment = Commitments.findOne(CommitmentId);
+  var plotPrefs = [];
   var prefs = commitment.prefs;
   var prefsKey = _.keys(prefs);
-  var plotPrefs = [];
   _.each(prefsKey, function(key){
     var tmpKey = moment().startOf('week').add('hour', key/2);
     var tmpValue = prefs[key];
     plotPrefs.push([tmpKey.toDate().getTime(), tmpValue]);
-  });
-  $.plot($("#placeholder"), [plotPrefs], 
+  });  
+  $.plot($("#placeholder"), [plotPrefs],
          {
            xaxis:{
              mode: "time",
@@ -39,16 +43,15 @@ var shiftTime = function(t, dayDelta, minuteDelta) {
     .toDate();
 };
 
-Meteor.startup(function () {
-  Accounts.ui.config({
-    passwordSignupFields: 'USERNAME_ONLY'
-  });
-  
+startFullCalendar = function(){
   $('#calendar').fullCalendar({
     header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      left:' ',
+      center: ' ',
+      right: ' '
+      //left: 'prev,next today',
+      //center: 'title',
+      //right: 'month,agendaWeek,agendaDay'
     },
     defaultView: 'agendaWeek',
     selectable: true,
@@ -56,30 +59,35 @@ Meteor.startup(function () {
     editable: true,
     contentHeight: 600,
     firstHour: 9,
-
+    eventColor: 'black',
+    
     // Events inserted if clicked on empty slots
     select: function(start, end, allDay) {
+      if(Meteor.user().services.google){
+        alert('Please go back to GCal to edit your one-off events');
+        return;
+      };
       var title = prompt('Event Title:');
       if (title) {
         Events.insert({
           userId: Meteor.userId(),
           commitmentId: 0,
-	        title: title,
-	        start: start,
-	        end: end,
-	        allDay: allDay
-	      });
+	  title: title,
+	  start: start,
+	  end: end,
+	  allDay: allDay,
+          gCalEvent: false,
+	});
       }
-      calendar.fullCalendar('unselect');
     },
-
+    
     events: function(start, end, callback) {
       callback(Events.find().fetch());
     },
 
     // Delete event by clicking on it
     eventClick: function(event, jsEvent, view) {
-      if (!event.commitmentId){
+      if (!event.commitmentId && !event.gCalEvent){
         var deleteFlag = confirm
         ('Do you really want to delete the ' + event.title + ' event?');
         if (deleteFlag) Events.remove(event._id);
@@ -88,22 +96,45 @@ Meteor.startup(function () {
 
     // Allow events to be moved in the calendar
     eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
-      tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
-      plotUpdate();
+      if (event.commitmentId){
+        tsnug.updateCommitmentPreferences(event, dayDelta, minuteDelta);
+        
+        var user = Meteor.user();
+        if (user && user.services && user.services.google){
+          //updateGCalCommitments();
+        }
+      }
       Events.remove(event._id);
       event.lastUpdated = moment().toDate();
       Events.insert(event);
     }
   });
-
+  
   Deps.autorun(function () {
     Events.find();
-    $('#calendar').fullCalendar(
+    $('#calendar').fullCalendar( 
       'refetchEvents'
     );
-  });
-});
+  })
+}
 
-Template.copyright.yearOfProduction = function(){
-  return moment().year();
-};
+Meteor.startup(function () {
+  // Deprecated
+  Accounts.ui.config({
+    requestPermissions: {
+      google: ['openid','email',
+               'https://www.googleapis.com/auth/calendar.readonly']
+    },
+    passwordSignupFields: 'USERNAME_ONLY'
+  });
+  
+  Session.set("loginStatus", "signIn");
+  
+  Deps.autorun(function(){
+    selectedCommitment = Session.get("selected_commitment")
+    if(Meteor.user() && selectedCommitment){
+      plotUpdate(selectedCommitment);
+    }
+  }) 
+})
+

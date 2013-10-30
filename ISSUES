@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////
+ISSUES
+=> Convention to use in adding todo in code
+=> // tsnugTODO
+////////////////////////////////////////////////////
+
+**USER INTERFACE**
+1. Adding instructions to the instruction buttons (pop-up)
+2. Logo Design?
+3. Hide and Show panel
+4. Cubism plots to show user statistics
+
+**GOOGLE CALENDAR SYNC**
+1. Transfer files to package directory
+2. Separate insert, delete, update operations on GCal into diff. files
+3. Rewrite GCal update (delete then insert is not a good idea)
+4. Commitments collection should only set gCalId once
+
+**MOMENT GENERATING ALGO**
+1. Sometimes, commitment events still clash, bug in learnedMomentsFromNow.js
+

@@ -28,3 +28,19 @@ input[type="number"] {
 h1 {
     font-size: 1.5em;
 }
+
+#loginPage {
+    margin:100px 3px 0px 3px;
+    padding:0px 0px 0px 0px;
+    text-align:center;
+}
+
+#welcomeText{
+    margin:3px 3px 3px 3px;
+    padding:0px 0px 0px 0px;
+}
+
+#webSlogan{
+    text-align: center;
+    font-weight: bold;
+}
