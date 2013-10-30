@@ -1,20 +1,19 @@
-/*removeCalendar = function(calendarId){
+removeCalendar = function(calendar){
   HTTP.del(
-    gcalAPIprefix + "/calendars/"+calendarId,
+    gCalAPIprefix + "/calendars/"+ calendar.gCalId,
     {headers: authHeader},
-    removeCallBack
+    function(error, result){
+      if (result.statusCode != 200) console.log('return code not 200');
+    }
   );
 };
 
 removeEvent = function (eventId, calendarId){
   HTTP.del(
-    gcalAPIprefix + "/calendars/"+calendarId+"/events/"+eventId,
+    gCalAPIprefix + "/calendars/"+calendarId+"/events/"+eventId,
     {headers: authHeader},
-    removeCallBack
+    function(error, result){
+      if (result.statusCode != 200) console.log('return code not 200');
+    }
   );
 };
-
-var removeCallBack = function(error, result){
-  if (result.statusCode != 200) console.log('return code not 200');
-};
-*/

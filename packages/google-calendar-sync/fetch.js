@@ -1,3 +1,4 @@
+calendarList = [];
 getCalendarList = refreshEvents = getEvents = insertAppEvent = function () {};
 Session.setDefault('GCalSync.wantsRefresh', true);
 
@@ -5,14 +6,14 @@ Session.setDefault('GCalSync.wantsRefresh', true);
 
 Deps.autorun(function () {
   if (Session.get('GCalSync.authorized')) {
-    getCalendarList();
+    //getCalendarList();
   }
 });
 
 Deps.autorun(function () {
   if (Session.get('GCalSync.hasCalendarList') &&
       Session.get('GCalSync.wantsRefresh')) {
-    refreshEvents();
+    //refreshEvents();
     Session.set('GCalSync.wantsRefresh', false);
   }
 });
@@ -26,28 +27,31 @@ getCalendarList = function () {
         calendarList = _.filter(result.data.items, function (c) {
           return c.selected && (c.summary !== "Weather");
         });
-        // Insert calendars to GCal collections
-        _.each(calendarList, function(c){
-          GCalCalendars.insert({
-            gCalId: c.id,
-            title: c.summary,
-          });
-        });
         Session.set('GCalSync.hasCalendarList', true);
       }
     });
 };
 
-refreshEvents = function(){
-  // Remove all events from database and refetch
-  GCalEvents.remove({});
+refreshEvents = function () {
+  var now = moment().toDate();
+  appEvents.find({
+    gCalEvent: true, 
+    lastUpdated: {$lt: now}
+  }).forEach(function (gCalEvent) {
+    appEvents.remove(gCalEvent._id);
+  });
   getEvents();
-}
+};
 
 getEvents = function (calendar) {
   if (arguments.length === 0) {
-    calendarCursor = GCalCalendars.find({});
-    calendarCursor.forEach(function (c) { getEvents(c); });
+    _.forEach(calendarList, function (c) { getEvents(c); });
+    return;
+  }
+  var appCal = appCalendars.findOne({gCalId: calendar.id});
+  if (appCal) {
+    // App manages this calendar. Do not override with
+    // event modififications made in Google Calendar.
     return;
   }
 
@@ -61,7 +65,7 @@ getEvents = function (calendar) {
 
   console.log(calendar);
   HTTP.get(
-    gCalAPIprefix + "/calendars/"+calendar.gCalId+"/events",
+    gCalAPIprefix + "/calendars/"+calendar.id+"/events",
     {
       headers: authHeader,
       params: {
@@ -73,16 +77,26 @@ getEvents = function (calendar) {
     },
     function (error, result) {
       if (result.statusCode === 200) {
-        console.log(calendar);
         _.forEach(result.data.items, function(event){
-          GCalEvents.insert({
-            title: event.summary, 
-            start: new Date(event.start.dateTime), 
-            end: new Date(event.end.dateTime)
-          });
+          insertAppEvent(event);
         });
       } else {
         console.log("could not fetch events for " + calendar.title);
       }
     });
 };
+
+var insertAppEvent = function(event){
+  appEvent = {
+    gCalEvent: true,
+    userId: Meteor.userId(), 
+    title: event.summary, 
+    start: new Date(event.start.dateTime), 
+    end: new Date(event.end.dateTime), 
+    allDay: false, 
+    commitmentId: 0,
+    lastUpdated: moment().toDate(),
+    editable: false
+  };
+  appEvents.insert(appEvent);
+}

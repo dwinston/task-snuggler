@@ -1,6 +1,4 @@
-//////
-// Client calls refreshGCalEvents()
-//////
+/*
 
 var googleCalendars = [];
 var gcalAPIprefix = "https://www.googleapis.com/calendar/v3";
@@ -145,4 +143,4 @@ var checkBeforeUpdate = function(error, result){
   }
   else console.log('return code not equal to 200');
 }
-
+*/

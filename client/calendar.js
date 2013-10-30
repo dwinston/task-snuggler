@@ -4,7 +4,7 @@ Template.calendar.rendered = function(){
   if (user && user.services && user.services.google){
     //refreshGCalEvents();
     GCalSync.setEvents(Events);
-    GCalSync.setCalendars(Commitments, {eventForeignKey: "commitmentId"});
+    GCalSync.setCalendars(Commitments);
     GCalSync.setAuth(Meteor.user().services.google);
   }
 }

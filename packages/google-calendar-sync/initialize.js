@@ -2,18 +2,8 @@ authHeader = null;
 gCalAPIprefix =  "https://www.googleapis.com/calendar/v3";
 appEvents = (typeof Events === "undefined") ? null : Events;
 appCalendars = (typeof Calendars == "undefined") ? null : Calendars;
-
-// Collections for holding GCal database on client side
-// Collections are not connected to server
-// Q: when does the local databse get deleted? 
-// Will this lead to security problems?
-GCalEvents = new Meteor.Collection(null, {connection: null});
-GCalCalendars = new Meteor.Collection(null, {connection: null});
-
-// Options for specifying the relationship between the application's
-// event and calendar collections.
-appCalendarHasMany = "eventIds";
-appEventHasOne     = "calendarId";
+calendarHandler = eventHandler = null;
+calendarTitlePrefix = "tsnug: "; // For now, may have a better solution
 
 GCalSync = {
   // Input: a Meteor.user().services.google object that has
@@ -23,6 +13,8 @@ GCalSync = {
     authHeader = {'Authorization': auth};
     // tsnugTODO: use googAuth.expiresAt to prompt user to reauthenticate.
     Session.set('GCalSync.authorized', true);
+    // starts to observe changes for collections in task snugglers
+    startCollectionListener();
   },
 
   setEvents: function (meteorCollection) {
@@ -34,44 +26,47 @@ GCalSync = {
   // the name of the foreign key in appEvents that refers to its calendar
   // ('commitmentId' in Task Snuggler).  
   setCalendars: function (meteorCollection, options) {
-    appCalendarHasMany = options.eventIds || "eventIds";
-    appEventHasOne = options.eventForeignKey || "calendarId";
     appCalendars = meteorCollection;
-  },
-  
-  //insert: function(doc){},
-  //remove: function(doc){},
-  //fetch: function(){},
-  // for testing
-  display: function(){
-    console.log("display");
-    calendarCursor = GCalCalendars.find({});
-    calendarCursor.forEach(function (c) { console.log(c.title) });
-    eventCursor = GCalEvents.find({});
-    eventCursor.forEach(function (c) { console.log(c.title) });
+  }, 
+
+  // Called when  user log outs
+  exit: function(){
+    stopCollectionListener();
   }
 };
 
-GCalEvents.observeChanges({
-  added: function (id, fields) {
-    
-  },
-  changed: function (id, fields){
-    
-  },
-  removed: function (id) {
-    
-  }
-});
+startCollectionListener = function(){
+  // tsnug TODO: add the numSession and hoursPerSession
+  // information into the description of the calendar
+  calendarHandler = appCalendars.find().observe({
+    added: function(doc){
+      // Inside insertCalendar, events are also inserted
+      // Bug: everytime web app refreshes,
+      // the calendar is re-inserted
+      insertCalendar(doc);
+    }, 
+    changed: function (newDoc, oldDoc){
+      // Inside updateCalendar, event names are also updated
+      updateCalendar(newDoc);
+    },
+    removed: function (doc){
+      // Removing calendar means events are also removed
+      removeCalendar(doc);
+    }
+  });
 
-GCalCalendars.observeChanges({
-  added: function (id, fields) {
-    
-  },
-  changed: function (id, fields){
-    
-  },
-  removed: function (id) {
-    
-  }
-});
+  // tsnug TODO: remove field gCalEvent and use commitmentId to identify
+  // commitment events
+  eventHnadler = appEvents.find({gCalEvent: {$ne: true}}).observe({
+    added: function(doc){},
+    changed:function(doc){},
+    removed: function(doc){
+      // Only remove events due to change of numSessions
+    }
+  });
+};
+
+stopCollectionListener = function(){
+  calendarHandler.stop();
+  eventHandler.stop();
+}

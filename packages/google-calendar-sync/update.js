@@ -1,7 +1,6 @@
-/*
-updateEvent = function (calendarId, event){
+updateEvent = function (event, calendarId){
   HTTP.put(
-    gcalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
+    gCalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
     {
       headers: authHeader,
       data: {
@@ -10,24 +9,32 @@ updateEvent = function (calendarId, event){
         end: event.end
       }
     },
-    updateCallBack
+    function(error, result){
+      if (result.statusCode != 200) console.log('return code not 200');
+      else console.log("updated an event");
+    }
   );
 };
 
 updateCalendar = function(calendar){
   HTTP.put(
-    gcalAPIprefix + "/calendars/" + calendarId,
+    gCalAPIprefix + "/calendars/" + calendar.gCalId,
     {
       headers: authHeader,
       data: {
-        summary: calendar.title
+        summary: calendarTitlePrefix+calendar.title
       }
     },
-    updateCallBack
+    function(error, result){
+      if (result.statusCode != 200) console.log('return code not 200');
+      else{
+        console.log("updated a calendar");
+      _.each(calendar.eventIds, function(eventId){
+        console.log(eventId);
+        event = appEvents.findOne(eventId);
+        updateEvent(event, calendar.gCalId);
+      });
+      }
+    }
   );
 };
-
-var updateCallBack = function (error, result){
-  if (result.statusCode != 200) console.log('return code not 200');
-};
-*/
