@@ -1,0 +1,87 @@
+{
+  "format": "unipackage-slice-pre1",
+  "packageVariables": [
+    {
+      "name": "GCalSync",
+      "export": true
+    },
+    {
+      "name": "authHeader"
+    },
+    {
+      "name": "gCalAPIprefix"
+    },
+    {
+      "name": "appEvents"
+    },
+    {
+      "name": "appCalendars"
+    },
+    {
+      "name": "appCalendarHasMany"
+    },
+    {
+      "name": "appEventHasOne"
+    },
+    {
+      "name": "calendarList"
+    },
+    {
+      "name": "getCalendarList"
+    },
+    {
+      "name": "refreshEvents"
+    },
+    {
+      "name": "getEvents"
+    },
+    {
+      "name": "insertAppEvent"
+    },
+    {
+      "name": "appEvent"
+    },
+    {
+      "name": "insertEvent"
+    },
+    {
+      "name": "insertCalendar"
+    },
+    {
+      "name": "updateEvent"
+    },
+    {
+      "name": "updateCalendar"
+    },
+    {
+      "name": "removeCalendar"
+    },
+    {
+      "name": "removeEvent"
+    }
+  ],
+  "uses": [
+    {
+      "package": "meteor"
+    },
+    {
+      "package": "underscore"
+    },
+    {
+      "package": "deps"
+    },
+    {
+      "package": "session"
+    }
+  ],
+  "resources": [
+    {
+      "type": "prelink",
+      "file": "browser/packages/google-calendar-sync.js",
+      "length": 23664,
+      "offset": 0,
+      "servePath": "/packages/google-calendar-sync.js",
+      "sourceMap": "browser/packages/google-calendar-sync.js.map"
+    }
+  ]
+}
