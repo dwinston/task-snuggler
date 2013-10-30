@@ -7,6 +7,9 @@ Template.dashboard.events({
   "click #removeCommitment": function (evt, templ){
     evt.preventDefault();
     var commitment = Commitments.findOne(Session.get("selected_commitment"));
+    if (!confirm("Really delete your commitment: \""+commitment.title+"\"?")) { 
+      return;
+    }
     _.each(commitment.eventIds, function(id){
       Events.remove(id);
     });
