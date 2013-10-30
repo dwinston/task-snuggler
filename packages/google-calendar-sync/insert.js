@@ -10,6 +10,7 @@ insertEvent = function(event, calendarId){
       }
     },
     function (error, result){
+      console.log(result.data.id);
       if (result.statusCode != 200) console.log('return code not 200');
       else appEvents.update(event._id, {$set:{gCalId: result.data.id}});
     });

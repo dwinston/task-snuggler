@@ -43,11 +43,11 @@ startCollectionListener = function(){
       // Inside insertCalendar, events are also inserted
       // Bug: everytime web app refreshes,
       // the calendar is re-inserted
-      insertCalendar(doc);
+      if (!doc.gCalId) insertCalendar(doc);
     }, 
     changed: function (newDoc, oldDoc){
       // Inside updateCalendar, event names are also updated
-      updateCalendar(newDoc);
+      if (newDoc.gCalId) updateCalendar(newDoc);
     },
     removed: function (doc){
       // Removing calendar means events are also removed
@@ -59,7 +59,10 @@ startCollectionListener = function(){
   // commitment events
   eventHnadler = appEvents.find({gCalEvent: {$ne: true}}).observe({
     added: function(doc){},
-    changed:function(doc){},
+    changed:function(newDoc, oldDoc){
+      calendar = appCalendars.findOne({_id:newDoc.commitmentId});
+      updateEvent(newDoc, calendar.gCalId);
+    },
     removed: function(doc){
       // Only remove events due to change of numSessions
     }

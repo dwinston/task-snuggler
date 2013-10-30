@@ -1,4 +1,7 @@
 updateEvent = function (event, calendarId){
+  // tsnug TODO: update Event doesn't work
+  // there is some sync timing problem which makes event.gCalId unavailable
+  console.log(event.gCalId);
   HTTP.put(
     gCalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
     {
@@ -27,14 +30,7 @@ updateCalendar = function(calendar){
     },
     function(error, result){
       if (result.statusCode != 200) console.log('return code not 200');
-      else{
-        console.log("updated a calendar");
-      _.each(calendar.eventIds, function(eventId){
-        console.log(eventId);
-        event = appEvents.findOne(eventId);
-        updateEvent(event, calendar.gCalId);
-      });
-      }
+      else console.log("updated a calendar");
     }
   );
 };
