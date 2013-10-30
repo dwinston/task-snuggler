@@ -1,0 +1,44 @@
+# This is for planning. Actual issues to be resolved should be placed
+# as GitHub issues.
+
+#+TODO: OPEN FEATURE-BRANCH | COMMITTED
+#+TYP_TODO: DONNY CAMERON | DONE
+
+* FEATURE-BRANCH user interface
+** OPEN Adding instructions to the instruction buttons (pop-up)
+** OPEN Logo Design?
+** OPEN Hide and Show panel
+** OPEN Cubism plots to show user statistics
+
+
+* FEATURE-BRANCH Google Calendar Sync
+** OPEN Transfer files to package directory
+** OPEN Separate insert, delete, update operations on GCal into diff. files
+** OPEN Rewrite GCal update (delete then insert is not a good idea)
+** OPEN Commitments collection should only set gCalId once
+
+* FEATURE-BRANCH moment generating algorithm
+** COMMIT Sometimes, commitment events still clash, bug in learnedMomentsFromNow.js
+
+* DONE close google-calendar-integration branch
+  - State "DONE"       from "TODAY"      [2013-10-30 Wed 16:00]
+    - [X] it is too big. it's become the master branch
+    - [X] fold work into master, rebranch from master
+    - [X] "feature" branches. fewer than 30 commits
+* DONE brainstorm on eliminating necessity of meeting regularly
+     :PROPERTIES:
+     :ID:       aafc4f3a-1306-4be0-be9c-984713ee2562
+     :Effort:   0:10
+     :END:
+  - monthly strategic meetings 
+  - use github issue tracker
+  - transition to meeting every two weeks?
+    Keep it every week for November. Reevaluate then.
+* OPEN confirm removal action on "click #removeCommitment"
+    :PROPERTIES:
+    :Effort:   0:10
+    :END:
+   - I thought it would just cancel my edits to the commitment. Other
+     users could be similarly confused.
+   - add prompt() dialog to confirm removal. Not annoying because I
+     don't think batch removal will be common.
