@@ -38,3 +38,8 @@ your past preferences.
 
 * One-off events can be inserted manually or imported via Google
   Calendar.
+
+*Does* it work?
+===============
+
+Sort of... maybe. Contibutions welcome!
