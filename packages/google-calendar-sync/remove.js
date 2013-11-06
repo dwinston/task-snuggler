@@ -1,6 +1,7 @@
-removeCalendar = function(calendar){
+removeEvent = function (event, calendarId){
+  console.log("remove event - ");
   HTTP.del(
-    gCalAPIprefix + "/calendars/"+ calendar.gCalId,
+    gCalAPIprefix + "/calendars/"+calendarId+"/events/"+ event.gCalId,
     {headers: authHeader},
     function(error, result){
       if (result.statusCode != 200) console.log('return code not 200');
@@ -8,9 +9,10 @@ removeCalendar = function(calendar){
   );
 };
 
-removeEvent = function (eventId, calendarId){
+removeCalendar = function(calendar){
+  console.log("remove calendar");
   HTTP.del(
-    gCalAPIprefix + "/calendars/"+calendarId+"/events/"+eventId,
+    gCalAPIprefix + "/calendars/"+ calendar.gCalId,
     {headers: authHeader},
     function(error, result){
       if (result.statusCode != 200) console.log('return code not 200');

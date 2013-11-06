@@ -40,15 +40,22 @@ startCollectionListener = function(){
   // information into the description of the calendar
   calendarHandler = appCalendars.find().observe({
     added: function(doc){
+      console.log('In add calendar handler');
       // Inside insertCalendar, events are also inserted
+      // Calendar are always commitments and this will do the job for now
       if (doc.gCalId == undefined) insertCalendar(doc);
     }, 
     changed: function (newDoc, oldDoc){
-      // Inside updateCalendar, event names are also updated
+      console.log('In changed calendar handler');
+      // For updating calendar name
+      // Event names are updated automatically
+      // because events are removed and regeneraed
       if (newDoc.gCalId) updateCalendar(newDoc);
     },
     removed: function (doc){
+      console.log('In remove calendar handler');
       // Removing calendar means events are also removed
+      // Google gives 400 (Bad request) error,but calendar is removed
       removeCalendar(doc);
     }
   });
@@ -56,13 +63,32 @@ startCollectionListener = function(){
   // tsnug TODO: remove field gCalEvent and use commitmentId to identify
   // commitment events
   eventHnadler = appEvents.find({gCalEvent: {$ne: true}}).observe({
-    added: function(doc){},
+    added: function(doc){
+      console.log('In add event handler');
+      // Only insert events due to change of numSessions
+      calendar = appCalendars.findOne({_id:doc.commitmentId});
+      if (calendar && 
+          calendar.gCalId != undefined && 
+          doc.gCalId == undefined){
+        console.log('perform add to GCAL in event handler');
+        insertEvent(doc, calendar.gCalId);
+      }
+    },
     changed:function(newDoc, oldDoc){
-      calendar = appCalendars.findOne({_id:newDoc.commitmentId});
-      updateEvent(newDoc, calendar.gCalId);
+      console.log('In change event handler');
+      // In task snuggled, everytime an edit happens, 
+      // task snuggler redoes generateEvents, 
+      // which remove events and allocate them again
     },
     removed: function(doc){
+      console.log('In remove event handler');
       // Only remove events due to change of numSessions
+      calendar = appCalendars.findOne({_id:doc.commitmentId});
+      console.log(calendar.gCalId);
+      console.log(doc.gCalId);
+      if (doc.gCalId && calendar.gCalId){
+        removeEvent(doc, calendar.gCalId);
+      }
     }
   });
 };

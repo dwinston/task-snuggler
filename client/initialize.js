@@ -1,6 +1,6 @@
-Meteor.subscribe("events");
-Meteor.subscribe("commitments");
 Meteor.subscribe("userData");
+Meteor.subscribe("commitments");
+Meteor.subscribe("events");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
 Session.setDefault("loginStatus", "signIn"); 

@@ -1,5 +1,5 @@
-Events = new Meteor.Collection("events");
 Commitments = new Meteor.Collection("commitments");
+Events = new Meteor.Collection("events");
 
 var insertCommitmentEvent = function (commitment, startsAt) {
   Events.insert({
@@ -12,7 +12,7 @@ var insertCommitmentEvent = function (commitment, startsAt) {
     end: moment(startsAt).add('hours', commitment.hoursPerSession).toDate(),
     allDay: false,
     lastUpdated: moment().toDate(),
-    color: commitment.color
+    color: commitment.color, 
   }, function (err, res) {
     Commitments.update(commitment._id, {
       $push: {eventIds: res}});

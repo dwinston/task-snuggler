@@ -1,4 +1,5 @@
 insertEvent = function(event, calendarId){
+  console.log("insert event to GCal - " + event.title);
   HTTP.post(
     gCalAPIprefix + "/calendars/"+calendarId+"/events",
     {
@@ -10,13 +11,13 @@ insertEvent = function(event, calendarId){
       }
     },
     function (error, result){
-      console.log(result.data.id);
       if (result.statusCode != 200) console.log('return code not 200');
       else appEvents.update(event._id, {$set:{gCalId: result.data.id}});
     });
 };
 
 insertCalendar = function(calendar){
+  console.log("insert calendar to GCal - " + calendar.title);
   HTTP.post(
     gCalAPIprefix + "/calendars",
     {
@@ -25,10 +26,9 @@ insertCalendar = function(calendar){
     },
     function (error, result) {
       if (result.statusCode === 200) {
-        console.log(result.data.id);
         appCalendars.update(calendar._id, {$set:{gCalId: result.data.id}});
-        console.log(calendar.eventIds);
         _.each(calendar.eventIds, function(eventId){
+          console.log("event added from insertCalendar");
           event = appEvents.findOne({_id:eventId});
           insertEvent(event, result.data.id);
         });
