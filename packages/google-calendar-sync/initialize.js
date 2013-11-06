@@ -41,9 +41,7 @@ startCollectionListener = function(){
   calendarHandler = appCalendars.find().observe({
     added: function(doc){
       // Inside insertCalendar, events are also inserted
-      // Bug: everytime web app refreshes,
-      // the calendar is re-inserted
-      if (!doc.gCalId) insertCalendar(doc);
+      if (doc.gCalId == undefined) insertCalendar(doc);
     }, 
     changed: function (newDoc, oldDoc){
       // Inside updateCalendar, event names are also updated
