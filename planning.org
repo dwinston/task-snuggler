@@ -6,6 +6,11 @@
 ** OPEN Adding instructions to the instruction buttons (pop-up)
 ** OPEN Logo Design?
 ** OPEN Hide and Show panels to give the calendar more space
-** OPEN Cubism plots to show user preference statistics
-
-* PROJECT Google Calendar Sync
+** OPEN prettify user preference statistics
+   possibly via using [[http://github.com/square/cubism][Cubism]]
+** OPEN enhance landing page
+*** fewer words
+*** enticements on landing page (diagrams, quotes, etc.)
+** OPEN new account validation
+* SOMEDAY Google Calendar Sync
+  Not necessary for release 1

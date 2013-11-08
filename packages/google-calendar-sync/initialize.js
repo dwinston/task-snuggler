@@ -5,6 +5,30 @@ appCalendars = (typeof Calendars == "undefined") ? null : Calendars;
 calendarHandler = eventHandler = null;
 calendarTitlePrefix = "tsnug: "; // For now, may have a better solution
 
+// TODO: Use a request queue to order HTTP requests.
+// Look at https://github.com/mbostock/queue -- it might
+// be perfect for this.
+// Danger: below code probably doesn't work or even run
+// queue = [];
+// callbackWithQueue = function (callback) {
+//   callback();
+//   queue.shift(); //pop()
+//   if (!_.isEmpty(queue)) {
+//     var next = _.first(queue);
+//     next.request();
+//   }
+// };
+// enqueue = function (request, callback) {
+//   if (_.isEmpty(queue)) {
+//     queue.push({request: request, callback: callback});
+//     request();
+//   } else {
+//     queue.push({request: request, 
+//                 callback: callbackWithQueue(callback)});
+//   }
+// }
+
+
 GCalSync = {
   // Input: a Meteor.user().services.google object that has
   //   an accessToken property.
@@ -36,33 +60,36 @@ GCalSync = {
 };
 
 startCollectionListener = function(){
-  // tsnug TODO: add the numSession and hoursPerSession
-  // information into the description of the calendar
+  // tsnug TODO: add the numSession and hoursPerSession information
+  // into the description of the calendar 
+  //
+  // TODO: retry functions involving async HTTP requests until they
+  // succeed, else fail gracefully somehow
   calendarHandler = appCalendars.find().observe({
     added: function(doc){
       console.log('In add calendar handler');
       // Inside insertCalendar, events are also inserted
       // Calendar are always commitments and this will do the job for now
-      if (doc.gCalId == undefined) insertCalendar(doc);
+      if (doc.gCalId === undefined) insertCalendar(doc);
     }, 
-    changed: function (newDoc, oldDoc){
+    changed: function (doc, oldDoc) {
       console.log('In changed calendar handler');
       // For updating calendar name
       // Event names are updated automatically
       // because events are removed and regeneraed
-      if (newDoc.gCalId) updateCalendar(newDoc);
+      if (doc.gCalId) updateCalendar(doc);
     },
     removed: function (doc){
       console.log('In remove calendar handler');
       // Removing calendar means events are also removed
       // Google gives 400 (Bad request) error,but calendar is removed
-      removeCalendar(doc);
+      if (doc.gCalId) removeCalendar(doc);
     }
   });
 
   // tsnug TODO: remove field gCalEvent and use commitmentId to identify
   // commitment events
-  eventHnadler = appEvents.find({gCalEvent: {$ne: true}}).observe({
+  eventHandler = appEvents.find({gCalEvent: {$ne: true}}).observe({
     added: function(doc){
       console.log('In add event handler');
       // Only insert events due to change of numSessions
