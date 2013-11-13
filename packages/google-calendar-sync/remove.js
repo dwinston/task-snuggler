@@ -1,5 +1,5 @@
 removeEvent = function (event, calendarId){
-  console.log("remove event - ");
+  // console.log("remove event - ");
   HTTP.del(
     gCalAPIprefix + "/calendars/"+calendarId+"/events/"+ event.gCalId,
     {headers: authHeader},
@@ -10,7 +10,7 @@ removeEvent = function (event, calendarId){
 };
 
 removeCalendar = function(calendar){
-  console.log("remove calendar");
+  // console.log("remove calendar");
   HTTP.del(
     gCalAPIprefix + "/calendars/"+ calendar.gCalId,
     {headers: authHeader},

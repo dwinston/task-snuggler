@@ -3,7 +3,7 @@ curDate = Date(); // Current week view
 getCalendarList = refreshEvents = getEvents = insertAppEvent = function () {};
 
 getCalendarList = function () {
-  console.log("In getCalendarList");
+  //console.log("In getCalendarList");
   HTTP.get(
     gCalAPIprefix + "/users/me/calendarList",
     {headers: authHeader},
@@ -21,7 +21,7 @@ getCalendarList = function () {
 // Currently, it is fetched whenever the user changes view
 
 refreshEvents = function () {
-  console.log("In refreshEvents");
+  //console.log("In refreshEvents");
   var now = moment().toDate();
   appEvents.find({
     gCalEvent: true, 
@@ -35,7 +35,6 @@ refreshEvents = function () {
 
 getEvents = function (calendar) {
   if (arguments.length === 0) {
-    console.log("get Event now");
     _.forEach(calendarList, function (c) { getEvents(c); });
     return;
   }
@@ -50,7 +49,6 @@ getEvents = function (calendar) {
   var startOfWeek = moment(curDate).startOf('week');
   var endOfWeek = moment(curDate).endOf('week');
 
-  console.log(calendar);
   HTTP.get(
     gCalAPIprefix + "/calendars/"+calendar.id+"/events",
     {
@@ -63,12 +61,8 @@ getEvents = function (calendar) {
       }
     },
     function (error, result) {
-      console.log("result code = " + result.statusCode);
-      console.log(result.data.items);
-
       if (result.statusCode === 200) {
         _.forEach(result.data.items, function(event){
-          console.log('here');
           insertAppEvent(event);
         });
       } else {
@@ -78,7 +72,6 @@ getEvents = function (calendar) {
 };
 
 var insertAppEvent = function(event){
-  console.log("In insertAppEvent");
   // Todo: synchronize the google calendar coloring 
   // with the color in task snuggler
   appEvent = {

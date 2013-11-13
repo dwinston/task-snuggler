@@ -1,5 +1,5 @@
 insertEvent = function(event, calendarId){
-  console.log("insert event to GCal - " + event.title);
+  // console.log("insert event to GCal - " + event.title);
   HTTP.post(
     gCalAPIprefix + "/calendars/"+calendarId+"/events",
     {
@@ -17,7 +17,7 @@ insertEvent = function(event, calendarId){
 };
 
 insertCalendar = function(calendar){
-  console.log("insert calendar to GCal - " + calendar.title);
+  // console.log("insert calendar to GCal - " + calendar.title);
   HTTP.post(
     gCalAPIprefix + "/calendars",
     {

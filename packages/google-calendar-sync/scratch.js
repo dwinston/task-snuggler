@@ -1,3 +1,7 @@
+/*
+
+Brainstorming an implementation method for google-calendar-sync package
+
 // in google-calendar-sync package
 //yield these
 GCalEvents = new Meteor.Collection({connection: null});
@@ -35,3 +39,4 @@ GCalSync.fetch().forEach(function (evt) Events.insert(evt); );
 
 // create new event:
 evt = Events.insert(...); // GCalEvents.insert(evt);
+*/

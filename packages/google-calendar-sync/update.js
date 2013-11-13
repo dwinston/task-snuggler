@@ -1,7 +1,7 @@
 updateEvent = function (event, calendarId){
   // tsnug TODO: update Event doesn't work
   // there is some sync timing problem which makes event.gCalId unavailable
-  console.log("Update event in GCal - " + event.title);
+  // console.log("Update event in GCal - " + event.title);
   HTTP.put(
     gCalAPIprefix + "/calendars/" + calendarId + "/events/" + event.gCalId,
     {
@@ -20,7 +20,7 @@ updateEvent = function (event, calendarId){
 };
 
 updateCalendar = function(calendar){
-  console.log("Update event in GCal - " + calendar.title);
+  // console.log("Update event in GCal - " + calendar.title);
   HTTP.put(
     gCalAPIprefix + "/calendars/" + calendar.gCalId,
     {
