@@ -1,3 +1,9 @@
+Template.calendar.isGoogleUser = function(){
+  return Meteor.user() && 
+    Meteor.user().services && 
+    Meteor.user().services.google;
+}
+
 Template.calendar.rendered = function(){
   var user = Meteor.user();
   if (user) startFullCalendar();
