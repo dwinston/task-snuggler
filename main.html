@@ -126,7 +126,6 @@
 <template name="userLoggedIn">
   <div class="span6">
     <div class="span12">
-      {{> instruction}}
       {{> inputForm}}
       {{> dashboard}}
     </div>
@@ -136,22 +135,27 @@
   </div>
 </template>
 
-<template name="instruction">
-  <div id="instruction" class="well">
-    <h1>Event editing <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
-    {{#unless isGoogleUser}}
-    <p>Add events by clicking and dragging on the calendar.<br>
-      Delete events by clicking on an event.</p>
-    {{else}}
-    <p> Imported events cannot be edited and <br>
-      Only commitment events can be edited. </p>
-    {{/unless}}
-  </div>
-</template>
-
 <template name="inputForm">
   <div class="well">
-    <h1>Add Commitment <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
+    
+    <h1>Add Commitment
+      <!-- Instructions for inputForm -->
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          <i class="icon-question-sign"></i>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pagination" role="menu">
+          <li> Instructions: </li>
+          <li class="divider"></li>
+          <li> 
+            Enter your commitment details 
+            <br> and then add it to the dashboard
+          </li>
+        </ul>
+      </div>
+    </h1>
+
     <form id="addCommitment" class="form-inline">
       I commit to 
       <input type="text" class="input-mini" required="required"
@@ -170,7 +174,35 @@
 
 <template name="dashboard">
   <div id="dashboard" class="well">
-    <h1>Dashboard <button type="button" class="btn btn-default btn-lg"><i class="icon-question-sign"></i></button></h1>
+    <h1>Dashboard 
+
+      <!-- Instructions for dashboard -->
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown"
+           href="#">
+          <i class="icon-question-sign"></i>
+          <span class="caret"></span>
+       </a>
+        <ul class="dropdown-menu" role="menu">
+          <li> Instructions: </li>
+          <li class="divider"></li>
+          <li> 
+            To edit a commitment: press 
+            <i class="icon-pencil"></i>
+            <ul>
+              <li> To submit changes: press
+              <i class="icon-ok"></i></li>
+              <li> To delete a commiment: press 
+              <i class="icon-trash"></i></li>
+            </ul>
+          <li>
+            To reallocate commiement events: press
+            <i class="icon-refresh"></i>
+          </li>
+        </ul>
+      </div>
+  
+    </h1>
     Commitments:
     <ul id="commitments">
       {{#each commitments}}
@@ -212,7 +244,7 @@
              value="{{numSessions}}">
       times/week.
       <button type="submit" class="btn"><i class="icon-ok"></i></button>
-      <button id="removeCommitment" class="btn"><i class="icon-remove"></i></button>
+      <button id="removeCommitment" class="btn"><i class="icon-trash"></i></button>
     </form>
     {{/unless}}
   </li>
@@ -223,6 +255,7 @@
 </template>
 
 <template name="calendar">
+  <h1>
   <div align="center">
     <button type="button" class="btn btn-default btn-lg" id="previousWeekBtn">
       <i class="icon-arrow-left"></i>
@@ -234,7 +267,30 @@
     <button type="button" class="btn btn-default btn-lg" id="todayBtn">
      Today 
     </button>    
-  </div>
+
+      <!-- Instructions for calendar view -->
+     <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown"
+           href="#">
+          <i class="icon-question-sign"></i>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right" role="menu">
+          <li> Instructions: </li>
+          <li class="divider"></li>
+          <li role="presentation"> 
+            {{#unless isGoogleUser}}
+            Add events by clicking and dragging on the calendar.<br>
+              Delete events by clicking on an event.
+            {{else}}
+            Imported events cannot be edited and <br>
+              Only commitment events can be inserted and edited.
+            {{/unless}}
+          </li>
+        </ul>
+      </div>
+
+  </div></h1>
   <div id="calendar">
   </div>
 </template>
