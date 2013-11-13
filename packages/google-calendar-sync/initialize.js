@@ -5,9 +5,16 @@ appCalendars = (typeof Calendars == "undefined") ? null : Calendars;
 calendarHandler = eventHandler = null;
 calendarTitlePrefix = "tsnug: "; // For now, may have a better solution
 
+// Current implementation does not do any error checking and retry
+// It assumes a perfect internet connection
+// Possible solution: use queue example below to queue up asynchronous 
+// events, and does error checking (i.e. if error, retry before next 
+// sync event happens)
+
 // TODO: Use a request queue to order HTTP requests.
+// Can be implemented in another package
 // Look at https://github.com/mbostock/queue -- it might
-// be perfect for this.
+// be perfect for thi.s
 // Danger: below code probably doesn't work or even run
 // queue = [];
 // callbackWithQueue = function (callback) {
@@ -39,6 +46,14 @@ GCalSync = {
     Session.set('GCalSync.authorized', true);
     // starts to observe changes for collections in task snugglers
     startCollectionListener();
+    // Fetch calendar list and events
+    getCalendarList();
+  },
+
+  refresh: function(day){
+    console.log("refresh now");
+    curDate = day;
+    refreshEvents();
   },
 
   setEvents: function (meteorCollection) {
@@ -101,7 +116,7 @@ startCollectionListener = function(){
         insertEvent(doc, calendar.gCalId);
       }
     },
-    changed:function(newDoc, oldDoc){
+    changed:function(doc, oldDoc){
       console.log('In change event handler');
       // In task snuggled, everytime an edit happens, 
       // task snuggler redoes generateEvents, 

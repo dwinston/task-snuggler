@@ -2,10 +2,10 @@ Template.calendar.rendered = function(){
   var user = Meteor.user();
   if (user) startFullCalendar();
   if (user && user.services && user.services.google){
-    //refreshGCalEvents();
     GCalSync.setEvents(Events);
     GCalSync.setCalendars(Commitments);
     GCalSync.setAuth(Meteor.user().services.google);
+    GCalSync.refresh(moment().startOf('week'));
   }
 }
 
@@ -32,8 +32,11 @@ Template.calendar.events({
 });
 
 var refetchEvents = function(){
+  var cView = $('#calendar').fullCalendar('getView');
+  var startOfWeek = moment(cView.start).startOf('week');
+
   var user = Meteor.user();
   if (user && user.services && user.services.google){
-    //refreshGCalEvents();
+    GCalSync.refresh(startOfWeek.toDate());
   }
 }
