@@ -19,11 +19,11 @@ var insertCommitmentEvent = function (commitment, startsAt) {
   });
 };
 
-generateEvents = function (commitmentId, algorithm, numPastEvent) {
+generateEvents = function (commitmentId, algorithm, numPastEvents) {
   var commitment = Commitments.findOne(commitmentId);
   var fn = tsnug[algorithm];
-  numPastEvent = numPastEvent || 0;
-  var startsAts = fn(commitment, numPastEvent);
+  numPastEvents = numPastEvents || 0;
+  var startsAts = fn(commitment, numPastEvents);
   if (_.isEmpty(startsAts)) {
     if (Meteor.isClient) {
       alert("There isn't enough non-conflicting time for this commitment.");

@@ -104,7 +104,7 @@ Template.commitment.events({
       var checkedEvent = +templ.find("#"+id).checked;
       console.log(checkedEvent);
       if (checkedEvent){ 
-        // Generate events according to the chekced boxes
+        // Generate events according to the checked boxes
         pastEvents.push(id);
       }
       else{
@@ -112,21 +112,25 @@ Template.commitment.events({
       }
     });
     console.log(pastEvents);
-    Commitments.update(
-      commitment._id, 
-      {$set: 
-       {
-         eventIds: pastEvents
-       }
-      }, function (err) {
-        if (!err) { 
-          generateEvents(commitment._id, 
-                         Session.get("eventGenerationAlgorithm"),
-                         pastEvents.length
-                        ); 
+    if (pastEvents.length === commitment.numSessions) {
+      console.log("You did them all!");
+    } else {
+      Commitments.update(
+        commitment._id, 
+        {$set: 
+         {
+           eventIds: pastEvents
+         }
+        }, function (err) {
+          if (!err) { 
+            generateEvents(commitment._id, 
+                           Session.get("eventGenerationAlgorithm"),
+                           pastEvents.length
+                          ); 
+          }
         }
-      }
-    );
+      );
+    }
   }
 });
 
