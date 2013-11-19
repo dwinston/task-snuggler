@@ -3,7 +3,6 @@
 </head>
 
 <body>
-  {{>header}}
   {{>mainPage}}
   {{> footer}}
 </body>
@@ -24,62 +23,98 @@
 </template>
 
 <template name="mainPage">
+  {{#if currentUser}}
+  {{> header}}
   <div class="container">
     <div class="row-fluid">
-      {{#if currentUser}}
       {{>userLoggedIn}}
-      {{else}}
-      {{>userNotLoggedIn}}
-      {{/if}}
     </div>
   </div>
+  {{else}}    
+  <div class="container">
+    {{>userNotLoggedIn}}
+  </div>
+  {{/if}}
 </template>
 
 <template name="userNotLoggedIn">
-  <div id="welcomeText" class="span8">
-    <div class="well">
-      <h3>What is Task Snuggler?</h3>
-      <p>
-        We make commitments. 
-        Commitments can help you improve a certain skill through practice. 
-        It can also help you to live a healthier lifestyle. 
-        Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
-        A good example would be jogging twice a week, with each session lasting one hour. 
-        Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
-      </p>
-      <p>
-        Task Snuggler wants to help you stick to commitments. 
-        This is because 
-        <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
-        Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
-      </p>
-      <hr>
-      <h3>How does it work?</h3>
-      <p>
-        <ul>
-          <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
-            Sessions get added to your calendar so as not to conflict with existing events. </li>
-          <li>If you add events, your commitment sessions will adjust as necessary. </li>
-          <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
-          <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
-          <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
-        </ul>
-      </p>
+  <div id="userNotLoggedIn" class="row-fluid well">
+    <div id="welcomeTitle" class="span12">
+        Task Snuggler<br><br>
+        <h3>You commit, we arrange</h3>
+    </div>    
+    <div id="loginPage" class="span5 offset3">
+      {{>loginPage}}
     </div>
-  </div>
-  {{> loginPage}}
-  <div id="webSlogan" class="span12"> 
-    <p><hr>
+
+    <div id="welcomeText" class="span12">
+        <h3>What is Task Snuggler?</h3>
+        <p>
+          We make commitments. 
+          Commitments can help you improve a certain skill through practice. 
+          It can also help you to live a healthier lifestyle. 
+          Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
+          A good example would be jogging twice a week, with each session lasting one hour. 
+          Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
+        </p>
+        <p>
+          Task Snuggler wants to help you stick to commitments. 
+          This is because 
+          <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
+          Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
+        </p>
+        <hr>
+    {{>featureList}}
+
+        <!-- Kind of mentioned in the calendar question icons
+        <h3>How does it work?</h3>
+        <p>
+          <ul>
+            <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
+              Sessions get added to your calendar so as not to conflict with existing events. </li>
+            <li>If you add events, your commitment sessions will adjust as necessary. </li>
+            <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
+            <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
+            <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
+          </ul>
+        </p>
+        -->
+      </div>
+   
+    <div id="webSlogan" class="span12 offset"> 
+      <hr><h1>
       Your commitment sessions snuggle around the other events in your life, <br>
-      you develop the habits you want, and <br>
-      LIFE IS GOOD!!
-    </p>
+        you develop the habits you want, and LIFE IS GOOD!!</h1>
+    </div>
+    
+    </div>
+</template>
+
+<template name="featureList">
+  <div id ="featureList" class="span12">
+    <h3> Features </h3>
+    
+    <div class="row-fluid">
+      <div class="span6">
+        <h4> Automatic scheduler </h4>
+        Based on the user preference, task snuggler will automatically schedule your commitments, so you don't have to miss any of them.
+      </div>
+      <div class="span6">
+        <h4> User preference </h4>
+        The automatic scheduler is based on the user's past activity and the system learns the behavior of the user in order to arrange a suitable time for a commitment.
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <h4>Open source</h4>
+        The project is hosted on github under the MIT License and you are welcomed to check it out or even become a contributor.
+      </div>
+    </div>
   </div>
 </template>
 
 <template name="loginPage">
-  <div id="loginPage" class="span4">
-    <form class="form-horizontal">
+  <form class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="userName">User Name</label>
         <div class="controls">
@@ -102,22 +137,22 @@
       <div class="control-group">
         <div class="controls">
           <button type="submit" class="btn">Create Account</button>
-          <hr>
-          <button class="btn" id="signInBtn">Sign in</button>
+          <button id="signInBtn" class="btn">Sign in</button>
         </div>
         {{else}}      
         <div class="control-group">
           <div class="controls">
-            <button type="submit" class="btn">Sign in</button>
-            <hr>
-            <button class="btn" id="createAccountBtn">Create Account</button>
+            <button type="submit" class="btn"> Sign in</button>
+            <button id="createAccountBtn" class="btn">Create Account</button>
           </div>
         </div>
         {{/if}}
+        <!-- Hide Google Login for now
         <div class="controls">
           <div align="center"><hr>OR<hr></div>
           <button id="buttonGoogle" class="btn">Sign in with Google</button>
         </div>
+        -->
       </div>
     </form>
   </div>
@@ -182,7 +217,7 @@
            href="#">
           <i class="icon-question-sign"></i>
           <span class="caret"></span>
-       </a>
+        </a>
         <ul class="dropdown-menu" role="menu">
           <li> Instructions: </li>
           <li class="divider"></li>
@@ -191,9 +226,9 @@
             <i class="icon-pencil"></i>
             <ul>
               <li> To submit changes: press
-              <i class="icon-ok"></i></li>
+                <i class="icon-ok"></i></li>
               <li> To delete a commitment: press 
-              <i class="icon-trash"></i></li>
+                <i class="icon-trash"></i></li>
             </ul>
           <li>
             To reallocate commitment events: press
@@ -201,7 +236,7 @@
           </li>
         </ul>
       </div>
-  
+      
     </h1>
     Commitments:
     <ul id="commitments">
@@ -221,14 +256,14 @@
       <button id="editCommitmentBtn" type="button" class="btn btn-default btn-lg">
         <i class="icon-pencil"></i>
       </button>
-    {{title}} for {{hoursPerSession}} hours, 
-    {{numSessions}} times/week.
+      {{title}} for {{hoursPerSession}} hours, 
+      {{numSessions}} times/week.
       {{#each commitmentEvents}}
       {{> commitmentCheckBox}}
       {{/each}}
-    <button type="submit" class="btn">
-      <i class="icon-refresh"></i>
-    </button>
+      <button type="submit" class="btn">
+        <i class="icon-refresh"></i>
+      </button>
     </form>
     {{else}}    
     <form id="editCommitment" class="form-inline">
@@ -256,20 +291,20 @@
 
 <template name="calendar">
   <h1>
-  <div align="center">
-    <button type="button" class="btn btn-default btn-lg" id="previousWeekBtn">
-      <i class="icon-arrow-left"></i>
-    </button>
-    <button type="button" class="btn btn-default btn-lg" id="nextWeekBtn">
-      <i class="icon-arrow-right"></i>
-    </button>
-    {{currentViewWeek}}
-    <button type="button" class="btn btn-default btn-lg" id="todayBtn">
-     Today 
-    </button>    
+    <div align="center">
+      <button type="button" class="btn btn-default btn-lg" id="previousWeekBtn">
+        <i class="icon-arrow-left"></i>
+      </button>
+      <button type="button" class="btn btn-default btn-lg" id="nextWeekBtn">
+        <i class="icon-arrow-right"></i>
+      </button>
+      {{currentViewWeek}}
+      <button type="button" class="btn btn-default btn-lg" id="todayBtn">
+        Today 
+      </button>    
 
       <!-- Instructions for calendar view -->
-     <div class="btn-group">
+      <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown"
            href="#">
           <i class="icon-question-sign"></i>
@@ -281,10 +316,10 @@
           <li role="presentation"> 
             {{#unless isGoogleUser}}
             Add events by clicking and dragging on the calendar.<br>
-              Delete events by clicking on an event.
+            Delete events by clicking on an event.
             {{else}}
             Imported events cannot be edited and <br>
-              Only commitment events can be inserted and edited.
+            Only commitment events can be inserted and edited.
             {{/unless}}
           </li>
         </ul>

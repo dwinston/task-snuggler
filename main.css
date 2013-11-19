@@ -30,9 +30,16 @@ h1 {
 }
 
 #loginPage {
-    margin:100px 3px 0px 3px;
-    padding:0px 0px 0px 0px;
+}
+
+#userNotLoggedIn{
+    margin:0px 3px 0px 3px;
+}
+
+#welcomeTitle{
+    font-size: 80px;
     text-align:center;
+    padding:100px 0px 0px 0px;
 }
 
 #welcomeText{
@@ -41,6 +48,9 @@ h1 {
 }
 
 #webSlogan{
-    text-align: center;
+    text-align:center;
     font-weight: bold;
+}
+
+#featureList{
 }
