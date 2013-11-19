@@ -43,10 +43,7 @@
         Task Snuggler<br><br>
         <h3>You commit, we arrange</h3>
     </div>    
-    <div id="loginPage" class="span5 offset3">
-      {{>loginPage}}
-    </div>
-
+    {{>loginPage}}
     <div id="welcomeText" class="span12">
         <h3>What is Task Snuggler?</h3>
         <p>
@@ -114,6 +111,7 @@
 </template>
 
 <template name="loginPage">
+  <div id="loginPage" class="span5 offset3">
   <form class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="userName">User Name</label>

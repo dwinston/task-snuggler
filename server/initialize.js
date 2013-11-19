@@ -8,7 +8,22 @@ Meteor.startup(function () {
     clientId: "49998162042.apps.googleusercontent.com",
     secret: "mqQn-Ej6GJAxEIoSnOBAzLqh"
   });
-  
+
+  Accounts.validateNewUser(function(user) { 
+    if (user.username && user.username.length >= 3)
+      return true;
+    throw new Meteor.Error(403, "Username must have at least 3 characters");
+  });
+
+  Accounts.validateNewUser(function(user) { 
+    if (user.inputPassword && 
+        user.inputPassword >=3 &&
+        user.inputPassword == user.confirmPassword
+       )
+      return true;
+    throw new Meteor.Error(403, "Password must have at least 3 characters");
+  });
+   
   // These will be nuked upon 'meteor reset'.
   // To reset e.g. events and commitments,
   // do 'meteor mongo' and then
