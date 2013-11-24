@@ -1,4 +1,4 @@
-tsnug.learnedMomentsFromNow = function(commitment, numPastEvents) {
+tsnug.learnedMomentsFromNow = function(commitment, numPastEvents, guardTime) {
 
   var hoursPerSession = commitment.hoursPerSession;
   var sessionIndexSpan = hoursPerSession * 2;
@@ -26,6 +26,28 @@ tsnug.learnedMomentsFromNow = function(commitment, numPastEvents) {
     }
   });
 
+  // Remove the indices that happen to be in the guardTime
+  var sleepTime = guardTime[0].split(':');
+  var wakeUpTime = guardTime[1].split(':');
+  var sleepTimeIndex = sleepTime[0]*2 + (sleepTime[1]==30?1:0) - 48;
+  var wakeUpTimeIndex = wakeUpTime[0]*2 + (wakeUpTime[1]==30?1:0);
+  // Iterate over the week and take way the unwanted indices
+  var sleepRange=[];
+  for (var d=0; d<7; d++){
+    sleepRange = _.union(sleepRange,
+                         _.range(sleepTimeIndex+d*48,
+                                 wakeUpTimeIndex+1+d*48)
+                        ); 
+  }
+  availableStartIndices= _.filter(availableStartIndices, function(i){
+    if (_.indexOf(sleepRange, i) === -1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  });
+  
   // Sanity checks: given availableStartIndices, is it possible to generate 
   // numSessions sessions of duration hoursPerSession?
   // Check 1: Simple arithmetic. Necessary but insufficient.

@@ -1,7 +1,6 @@
 // Allow a user to create/update/remove her own documents
 
 Meteor.startup(function() {
-
   Commitments.allow({
     insert: function (userId, doc) {
       return (userId && doc.userId === userId);

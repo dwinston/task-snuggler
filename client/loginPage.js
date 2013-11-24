@@ -17,6 +17,7 @@ Template.loginPage.events({
     }
     else if (status=="createAccountReady"){
       var username = templ.find("#userName").value;
+      var name = templ.find("#name").value;
       var password = templ.find("#inputPassword").value;
       var passwordAgain = templ.find("#confirmPassword").value;
       if (password && 
@@ -26,7 +27,12 @@ Template.loginPage.events({
         // Need account details validation before creation
         Accounts.createUser({
           username:username, 
-          password: password
+          name: name,
+          password: password,
+          profile: {
+            sleepTime: "22:00",
+            wakeUpTime: "07:00"
+          }         
         }, errorCallBackCreateAccount);
       }
     }

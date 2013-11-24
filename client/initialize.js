@@ -134,7 +134,7 @@ Meteor.startup(function () {
   Deps.autorun(function(){
     selectedCommitment = Session.get("selected_commitment")
     if(Meteor.user() && selectedCommitment){
-      plotUpdate(selectedCommitment);
+      //plotUpdate(selectedCommitment);
     }
   }) 
 })

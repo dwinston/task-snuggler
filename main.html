@@ -116,20 +116,30 @@
       <div class="control-group">
         <label class="control-label" for="userName">User Name</label>
         <div class="controls">
-          <input type="text" id="userName" placeholder="User Name">
+          <input type="text" id="userName" placeholder="User Name"
+                 required="required">
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="inputPassword">Password</label>
         <div class="controls">
-          <input type="password" id="inputPassword" placeholder="Password">
+          <input type="password" id="inputPassword" placeholder="Password"
+                 required="required">
         </div>
       </div>
       {{#if createAccount}}
       <div class="control-group">
         <label class="control-label" for="confirmPassword">Password (again)</label>
         <div class="controls">
-          <input type="password" id="confirmPassword" placeholder="Password">
+          <input type="password" id="confirmPassword" placeholder="Password"
+                 required="required">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="name">Name</label>
+        <div class="controls">
+          <input type="text" id="name" placeholder="Name"
+                 required="required">
         </div>
       </div>
       <div class="control-group">
@@ -160,11 +170,12 @@
   {{#if showAll}}
   <div class="span6">
     <div class="span1">
-      <button class="btn-xlarge" id="panelHideBtn"> < </button>
-                                                      </div>
+      <button class="btn-xlarge" id="panelHideBtn">  &#60 </button>
+    </div>
     <div class="span11">
       {{> inputForm}}
-          {{> dashboard}}
+      {{> dashboard}}
+      {{> sleepGuard}}
     </div>
   </div>
   <div class="span6">
@@ -172,7 +183,7 @@
   </div>
   {{else}}
   <div class="span1">
-    <button class="btn-xlarge" id="panelShowBtn"> > </button>
+    <button class="btn-xlarge" id="panelShowBtn"> &#62 </button>
   </div>
   <div class="span11">
     {{> calendar}}
@@ -219,7 +230,6 @@
 <template name="dashboard">
   <div id="dashboard" class="well">
     <h1>Dashboard 
-
       <!-- Instructions for dashboard -->
       <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown"
@@ -245,7 +255,6 @@
           </li>
         </ul>
       </div>
-      
     </h1>
     Commitments:
     <ul id="commitments">
@@ -253,8 +262,10 @@
       {{> commitment}}
       {{/each}}
     </ul>
-    <div id="placeholder" style="width:500px;height:200px">
+    <!-- for the flot plot, disabled for now
+    <div id="placeholder" style="width:500px;height:100px">
     </div>
+    -->
   </div>
 </template>
 
@@ -296,6 +307,25 @@
 
 <template name="commitmentCheckBox">
   <input id={{_id}} type="checkbox" {{checked}}>
+</template>
+
+<template name="sleepGuard">
+  <div id="sleepGaurd" class="well">
+    <h1>Sleep Guard</h1>
+    <form id="sleepGuardForm" class="form-inline">
+      Sleep time:
+     <input type="time" step="1800" required="required"
+            id="sleepTime" class="input-small" 
+            value="{{sleepTime}}">
+     &#160 <!-- space -->
+      Wake up time:
+      <input type="time" step="1800" required="required"
+             id="wakeUpTime" class="input-small" 
+             value="{{wakeUpTime}}">
+      &#160 <!-- space -->
+      <button type="submit" class="btn"><i class="icon-ok"></i></button>
+    </form>  
+  </div>
 </template>
 
 <template name="calendar">

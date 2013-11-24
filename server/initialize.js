@@ -9,9 +9,14 @@ Meteor.startup(function () {
     secret: "mqQn-Ej6GJAxEIoSnOBAzLqh"
   });
 
-  Accounts.validateNewUser(function(user) { 
-    if (user.username && user.username.length >= 3)
+  Accounts.validateNewUser(function(user) {
+    var name = user.username;
+    if (name && 
+        name.length >= 3 &&
+        // Ensures no conflicted usernames
+        Meteor.users.findOne({username: name}) == undefined){
       return true;
+    }
     throw new Meteor.Error(403, "Username must have at least 3 characters");
   });
   
@@ -36,6 +41,10 @@ Meteor.startup(function () {
       Accounts.createUser({
         username: username,
         password: "foobar",
+        profile: {
+          sleepTime: "22:00",
+          wakeUpTime: "07:00"
+        }
       });
     });
   }

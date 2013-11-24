@@ -22,8 +22,13 @@ var insertCommitmentEvent = function (commitment, startsAt) {
 generateEvents = function (commitmentId, algorithm, numPastEvents) {
   var commitment = Commitments.findOne(commitmentId);
   var fn = tsnug[algorithm];
+  // Past events are not allocated
   numPastEvents = numPastEvents || 0;
-  var startsAts = fn(commitment, numPastEvents);
+  // Users sleep time is unavailble for allocation
+  // The call of Meteor.user() has an async error on server initialization
+  var userProfile = Meteor.user().profile; 
+  var guardTime  = [userProfile.sleepTime, userProfile.wakeUpTime];
+  var startsAts = fn(commitment, numPastEvents, guardTime);
   if (_.isEmpty(startsAts)) {
     if (Meteor.isClient) {
       alert("There isn't enough non-conflicting time for this commitment.");
@@ -35,9 +40,5 @@ generateEvents = function (commitmentId, algorithm, numPastEvents) {
     _.each(startsAts, function (startsAt) {
       insertCommitmentEvent(commitment, startsAt);
     });
-  }
-  var user = Meteor.users.findOne(commitment.userId);
-  if (user && user.services && user.services.google){
-    //updateGCalCommitments();
   }
 };

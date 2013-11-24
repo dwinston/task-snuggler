@@ -13,11 +13,12 @@ Template.dashboard.events({
     _.each(commitment.eventIds, function(id){
       Events.remove(id);
     });
-    $('#placeholder').html('');
+    // $('#placeholder').html(''); // for flot plot
     Commitments.remove(commitment._id);
     Session.set("selected_commitment", ""); // Avoid error with deps.autorun
   },
   "submit #editCommitment": function (evt, templ) {
+
     evt.preventDefault();
     var commitment = Commitments.findOne(Session.get("selected_commitment"));
     var newTitle = templ.find("#titleToEdit").value;
@@ -27,7 +28,6 @@ Template.dashboard.events({
     // only change in title, no need to update and regenerate events
     if ((commitment.numSessions == newNumSessions) &&
         (commitment.hoursPerSession == newHoursPerSession)){
-      console.log('here');
       Commitments.update(
         commitment._id, 
         {$set: 
@@ -77,7 +77,7 @@ Template.dashboard.events({
       );
     }
     Session.set("selected_commitment", "");
-    $('#placeholder').html('');
+    //$('#placeholder').html('');
   }
 });
 
@@ -95,14 +95,12 @@ Template.commitment.events({
     Session.set("selected_commitment", this._id);
   },
   'submit #refreshCommitment': function(evt, templ){
-    console.log("submit here");
     evt.preventDefault();
     var commitment = Commitments.findOne({_id:this._id});
     var pastEvents = [];
     _.each(commitment.eventIds, function(id){
       var event = Events.findOne({_id:id});
       var checkedEvent = +templ.find("#"+id).checked;
-      console.log(checkedEvent);
       if (checkedEvent){ 
         // Generate events according to the checked boxes
         pastEvents.push(id);
@@ -111,7 +109,6 @@ Template.commitment.events({
         Events.remove(id);
       }
     });
-    console.log(pastEvents);
     if (pastEvents.length === commitment.numSessions) {
       console.log("You did them all!");
     } else {
