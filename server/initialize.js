@@ -14,16 +14,17 @@ Meteor.startup(function () {
       return true;
     throw new Meteor.Error(403, "Username must have at least 3 characters");
   });
-
+  
+  // Buggy validation of new users password 
+  // Currently implemented on the client side
+  /*
   Accounts.validateNewUser(function(user) { 
-    if (user.inputPassword && 
-        user.inputPassword >=3 &&
-        user.inputPassword == user.confirmPassword
-       )
+    if (user.inputPassword && user.inputPassword.length >=3)
       return true;
     throw new Meteor.Error(403, "Password must have at least 3 characters");
   });
-   
+  */
+
   // These will be nuked upon 'meteor reset'.
   // To reset e.g. events and commitments,
   // do 'meteor mongo' and then
@@ -34,7 +35,7 @@ Meteor.startup(function () {
     _.each(usernames, function (username) {
       Accounts.createUser({
         username: username,
-        password: "foobar"
+        password: "foobar",
       });
     });
   }

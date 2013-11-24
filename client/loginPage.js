@@ -19,11 +19,16 @@ Template.loginPage.events({
       var username = templ.find("#userName").value;
       var password = templ.find("#inputPassword").value;
       var passwordAgain = templ.find("#confirmPassword").value;
-      // Need account details validation before creation
-      Accounts.createUser({
-        username:username, 
-        password: password
-      }, errorCallBackCreateAccount);
+      if (password && 
+          passwordAgain && 
+          password === passwordAgain &&
+          password.length >= 3){
+        // Need account details validation before creation
+        Accounts.createUser({
+          username:username, 
+          password: password
+        }, errorCallBackCreateAccount);
+      }
     }
   },
   "click #createAccountBtn": function (evt, templ){
