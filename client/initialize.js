@@ -4,6 +4,7 @@ Meteor.subscribe("events");
 Session.setDefault("eventGenerationAlgorithm","learnedMomentsFromNow"); 
 Session.setDefault("scratchTime", 10); // seconds before new pref persists
 Session.setDefault("loginStatus", "signIn"); 
+Session.setDefault("showDashboard", true);
 // Three statuses
 // signIn, createAccountReady, loggedIn
 

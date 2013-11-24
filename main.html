@@ -40,51 +40,51 @@
 <template name="userNotLoggedIn">
   <div id="userNotLoggedIn" class="row-fluid well">
     <div id="welcomeTitle" class="span12">
-        Task Snuggler<br><br>
-        <h3>You commit, we arrange</h3>
+      Task Snuggler<br><br>
+      <h3>You commit, we arrange</h3>
     </div>    
     {{>loginPage}}
     <div id="welcomeText" class="span12">
-        <h3>What is Task Snuggler?</h3>
-        <p>
-          We make commitments. 
-          Commitments can help you improve a certain skill through practice. 
-          It can also help you to live a healthier lifestyle. 
-          Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
-          A good example would be jogging twice a week, with each session lasting one hour. 
-          Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
-        </p>
-        <p>
-          Task Snuggler wants to help you stick to commitments. 
-          This is because 
-          <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
-          Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
-        </p>
-        <hr>
-    {{>featureList}}
+      <h3>What is Task Snuggler?</h3>
+      <p>
+        We make commitments. 
+        Commitments can help you improve a certain skill through practice. 
+        It can also help you to live a healthier lifestyle. 
+        Usually, it is desirable to consolidate a commitment by deciding on the number of sessions and the hours per session. 
+        A good example would be jogging twice a week, with each session lasting one hour. 
+        Unfortunately, given a tightly packed schedndule, it’s difficult and painful to schedule and re-schedule these sessions, week after week.
+      </p>
+      <p>
+        Task Snuggler wants to help you stick to commitments. 
+        This is because 
+        <a href="http://seriouspony.com/blog/2013/7/24/your-app-makes-me-fat">the cognitive load from decisions about scheduling </a>      can hurt the willpower you need to turn your commitments into real habits. 
+        Therefore, Task Snuggler is built to auto-schedule personal, habitual commitments, so they fit along with your busy schedules.
+      </p>
+      <hr>
+      {{>featureList}}
 
-        <!-- Kind of mentioned in the calendar question icons
-        <h3>How does it work?</h3>
-        <p>
-          <ul>
-            <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
-              Sessions get added to your calendar so as not to conflict with existing events. </li>
-            <li>If you add events, your commitment sessions will adjust as necessary. </li>
-            <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
-            <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
-            <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
-          </ul>
-        </p>
-        -->
-      </div>
-   
+      <!-- Kind of mentioned in the calendar question icons
+           <h3>How does it work?</h3>
+      <p>
+        <ul>
+          <li>You specify a commitment with sessions/week and hours/session (both can change; that’s fine).<br>
+            Sessions get added to your calendar so as not to conflict with existing events. </li>
+          <li>If you add events, your commitment sessions will adjust as necessary. </li>
+          <li>If you miss a session, your calendar will adjust if possible so you can do all your sessiosn before the week ends. </li>
+          <li>If you manually drag and drop commitment sessions, Task Snuggler listens and learns your preferences so that it learns where to place your commitment sessions based on your preference and free time.</li>
+          <li>For one-off events, they can be inserted manually or imported by using a Google account.</li>
+        </ul>
+      </p>
+      -->
+    </div>
+    
     <div id="webSlogan" class="span12 offset"> 
       <hr><h1>
-      Your commitment sessions snuggle around the other events in your life, <br>
+        Your commitment sessions snuggle around the other events in your life, <br>
         you develop the habits you want, and LIFE IS GOOD!!</h1>
     </div>
     
-    </div>
+  </div>
 </template>
 
 <template name="featureList">
@@ -112,7 +112,7 @@
 
 <template name="loginPage">
   <div id="loginPage" class="span5 offset3">
-  <form class="form-horizontal">
+    <form class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="userName">User Name</label>
         <div class="controls">
@@ -146,31 +146,42 @@
         </div>
         {{/if}}
         <!-- Hide Google Login for now
-        <div class="controls">
-          <div align="center"><hr>OR<hr></div>
-          <button id="buttonGoogle" class="btn">Sign in with Google</button>
-        </div>
-        -->
+             <div class="controls">
+               <div align="center"><hr>OR<hr></div>
+               <button id="buttonGoogle" class="btn">Sign in with Google</button>
+             </div>
+             -->
       </div>
     </form>
   </div>
 </template>
 
 <template name="userLoggedIn">
+  {{#if showAll}}
   <div class="span6">
-    <div class="span12">
+    <div class="span1">
+      <button class="btn-xlarge" id="panelHideBtn"> < </button>
+                                                      </div>
+    <div class="span11">
       {{> inputForm}}
-      {{> dashboard}}
+          {{> dashboard}}
     </div>
   </div>
   <div class="span6">
     {{> calendar}}
   </div>
+  {{else}}
+  <div class="span1">
+    <button class="btn-xlarge" id="panelShowBtn"> > </button>
+  </div>
+  <div class="span11">
+    {{> calendar}}
+  </div>
+  {{/if}}
 </template>
 
 <template name="inputForm">
   <div class="well">
-    
     <h1>Add Commitment
       <!-- Instructions for inputForm -->
       <div class="btn-group">
